@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Projects - Xin Xia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Xin Xia">
+<meta name="description" content="Xin Xia - Ph.D. student in Industrial Engineering at the University of Wisconsin-Madison. Multi-agent reinforcement learning, anomaly detection, and quality control.">
+<meta property="og:title" content="Projects - Xin Xia">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://xxia99.github.io/images/avatar.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<nav class="nav"><div class="in"><a class="brand" href="index.html"><b>Xin</b> Xia</a><ul><li><a href="index.html">about</a></li><li><a href="publications.html">publications</a></li><li><a href="projects.html" class=on>projects</a></li><li><a href="news.html">news</a></li><li><a href="cv.html">cv</a></li></ul></div></nav>
+<main class="page">
+<h1>projects</h1><p class="desc">Open-source code and earlier research projects.</p><div class="cards"><a class="card" href="https://github.com/xxia99/SetPLM"><img src="images/thumbs/setplm.jpg" alt=""><div class="b"><h4>SetPLM</h4><p>Keyphrase generation with a pretrained language model: T5 inside the One2Set paradigm, keyword-code control and keyword-based padding. State of the art on KP20K, Inspec, Krapivin, NUS, and SemEval.</p><div class="w">Tsinghua University, 2023</div></div></a><a class="card" href="https://github.com/xxia99/bqc_scheduling"><img src="images/thumbs/berthrl.jpg" alt=""><div class="b"><h4>BerthRL</h4><p>Dynamic berth and quay-crane scheduling as a bilevel problem, solved by a PPO-based algorithm that outperforms genetic algorithms, particle swarm optimization, and FIFO rules.</p><div class="w">Georgia Tech, 2022</div></div></a><a class="card" href="https://github.com/xxia99/DCGAN-for-Scenario-Generation"><img src="images/thumbs/dcgan.jpg" alt=""><div class="b"><h4>Scenario generation for integrated energy systems</h4><p>A Wasserstein DCGAN learns the joint behaviour of wind, photovoltaic, heating, and power subsystems; K-means picks typical scenarios for planning.</p><div class="w">Tianjin University, 2020</div></div></a></div>
+</main>
+<footer class="foot">&copy; 2026 Xin Xia &middot; <a href="mailto:xxia65@wisc.edu">xxia65@wisc.edu</a> &middot; Department of Industrial and Systems Engineering, University of Wisconsin-Madison. Layout inspired by <a href="https://github.com/alshedivat/al-folio">al-folio</a>.</footer>
+<div class="lb" id="lb"><img src="" alt=""><div class="cap"></div></div>
+<script>
+(function(){var lb=document.getElementById('lb'),im=lb.querySelector('img'),cp=lb.querySelector('.cap');
+document.querySelectorAll('a[data-lb]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();im.src=a.getAttribute('href');cp.textContent=a.getAttribute('data-lb')||'';lb.classList.add('open');});});
+lb.addEventListener('click',function(){lb.classList.remove('open');im.src='';});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){lb.classList.remove('open');im.src='';}});
+document.querySelectorAll('.absb').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();a.closest('.pub').classList.toggle('open');});});})();
+</script>
+</body>
+</html>
