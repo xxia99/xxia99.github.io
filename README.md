@@ -1,13 +1,14 @@
 # xxia99.github.io
 
-Personal academic website of Xin Xia. Plain HTML and CSS, no build step.
-Layout adapted from [Jon Barron's template](https://github.com/jonbarron/website).
+Personal academic website of Xin Xia. Plain HTML, CSS and a little jQuery (lightbox), no build step.
+Built on the [Strata](https://html5up.net/strata) template by HTML5 UP (CCA 3.0, see LICENSE-strata.txt).
 
 ## Files
 
 - `index.html` - the page (bio, news, publications, patents, experience)
-- `stylesheet.css` - styles
-- `images/XinXia.jpg` - headshot
+- `assets/` - Strata CSS, JS, Font Awesome
+- `images/avatar.jpg`, `images/bg.jpg` - headshot and sidebar background
+- `images/thumbs/`, `images/fulls/` - work previews (thumbnail + lightbox image)
 - `data/XinXia-CV.pdf` - CV (compiled from `xin_xia_academic_cv.tex`)
 
 ## Publish on GitHub Pages
@@ -26,5 +27,5 @@ Layout adapted from [Jon Barron's template](https://github.com/jonbarron/website
 
 ## Update
 
-Edit `index.html` directly (each paper is one `<article class="paper">` block), replace
+Edit `index.html` directly (each work is one `<article class="work-item">` block; add a 740x435 thumb and a full image), replace
 `data/XinXia-CV.pdf` after recompiling the CV, then commit and push.
