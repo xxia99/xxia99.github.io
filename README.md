@@ -1,13 +1,12 @@
 # xxia99.github.io
 
-Personal academic website of Xin Xia. Plain HTML, CSS and a little jQuery (lightbox), no build step.
-Built on the [Strata](https://html5up.net/strata) template by HTML5 UP (CCA 3.0, see LICENSE-strata.txt).
+Personal academic website of Xin Xia. Plain HTML and CSS with a tiny vanilla-JS lightbox; no build step, no framework.
 
 ## Files
 
 - `index.html` - the page (bio, news, publications, patents, experience)
-- `assets/` - Strata CSS, JS, Font Awesome
-- `images/avatar.jpg`, `images/bg.jpg` - headshot and sidebar background
+- `assets/site.css` - all styles
+- `images/avatar.jpg` - headshot
 - `images/thumbs/`, `images/fulls/` - work previews (thumbnail + lightbox image)
 - `data/XinXia-CV.pdf` - CV (compiled from `xin_xia_academic_cv.tex`)
 
@@ -27,5 +26,5 @@ Built on the [Strata](https://html5up.net/strata) template by HTML5 UP (CCA 3.0,
 
 ## Update
 
-Edit `index.html` directly (each work is one `<article class="work-item">` block; add a 740x435 thumb and a full image), replace
+Edit `index.html` directly (each paper is one `<article class="pub">` block under its year heading; add a 740x435 thumb and a full image), replace
 `data/XinXia-CV.pdf` after recompiling the CV, then commit and push.
