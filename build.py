@@ -275,7 +275,7 @@ for g in ["2026","2025","2024","Under review"]:
 research+='</section>'
 TIMELINE=[("2025 - present","Ph.D. candidate, University of Wisconsin-Madison","Industrial and Systems Engineering. Advisor: Prof. Kaibo Liu.","uw.svg","University of Wisconsin-Madison",""),
           ("2022 - 2025","Research assistant, Tsinghua University",'<a href="https://thu-sail-lab.github.io/home/" target="_blank" rel="noopener">SAIL Lab</a>. Advisor: <a href="https://www.ie.tsinghua.edu.cn/eng/info/1051/1031.htm" target="_blank" rel="noopener">Prof. Chen Zhang</a>.',"tsinghua.svg","Tsinghua University",""),
-          ("2021 - 2022","AI researcher intern, Ping An Technology","Multimodal document understanding; two invention patents.","pingan-tech.png","Ping An Technology"," wide pa"),
+          ("2021 - 2022","AI researcher intern, Ping An Technology","Computer vision and multimodal models.","pingan-tech.png","Ping An Technology"," wide pa"),
           ("2020 - 2022","M.Sc., Georgia Institute of Technology","Electrical and Computer Engineering.","gatech.svg","Georgia Institute of Technology",""),
           ("2016 - 2020","B.Eng., Tianjin University","Electrical Engineering and Automation.","tju.png","Tianjin University","")]
 cv='<section id="experience"><h2>Experience</h2><div class="vt">'+"".join(

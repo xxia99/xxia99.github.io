@@ -132,3 +132,4 @@ main section{counter-reset:proj}
 .proj>*{grid-column:2;min-width:0}.proj>.aw{justify-self:start}
 @media (max-width:760px){.proj{grid-template-columns:minmax(0,1fr)}.proj::before{grid-row:auto;font-size:34px;margin-bottom:6px}.proj>*{grid-column:1}}
 @media (max-width:760px){.vl.pa{width:100px}}
+@media (max-width:760px){.vt .vi:nth-child(n) .vl.pa{height:auto;width:110px}}
