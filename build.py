@@ -286,8 +286,6 @@ proj+=('<h2>Research</h2><div class="dia"><div class="dtop"><b>Reliable decision
   +"".join('<a class="dcol" href="project-%s.html"><div class="dq">%s</div><div class="dbox">%s</div><div class="dimg %s"><img src="%s" alt="" loading="lazy"></div></a>'%(t["slug"],t["q"],t["title"],t["fit"],t["cover"]) for t in THEMES)+'</div></div>')
 MINIS=[("Scenario generation for integrated energy systems","Scenario generation with a Wasserstein DCGAN.","https://github.com/xxia99/DCGAN-for-Scenario-Generation",
         dict(video="images/mini/gan_training.mp4",poster="images/mini/gan_training.jpg",cap="Generated daily scenarios during training")),
-       ("2048 with deep Q-learning","A DQN agent that plays 2048, with a web demo.","",
-        dict(video="images/mini/g2048_play.mp4",poster="images/mini/g2048_play.jpg",cap="The trained agent playing 2048")),
        ("Patient outcome prediction from text","Tabular patient records converted to text for classification.","https://github.com/xxia99/Text-Classification",
         dict(image="images/mini/text_curves.png",cap="Training loss with and without a pretrained embedding layer")),
        ("Power outage forecasting","Hourly county-level outage forecasts from weather data.","https://github.com/xxia99/weather_prediction",
