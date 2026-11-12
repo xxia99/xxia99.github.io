@@ -284,15 +284,23 @@ def card(t):
 proj='<section id="projects"><h1>Projects</h1>'
 proj+=('<h2>Research</h2><div class="dia"><div class="dtop"><b>Reliable decisions in budgeted systems</b><span>where sensing and action resources are limited</span></div><div class="dcols">'
   +"".join('<a class="dcol" href="project-%s.html"><div class="dq">%s</div><div class="dbox">%s</div><div class="dimg %s"><img src="%s" alt="" loading="lazy"></div></a>'%(t["slug"],t["q"],t["title"],t["fit"],t["cover"]) for t in THEMES)+'</div></div>')
-MINIS=[("BerthRL","Berth and quay-crane scheduling with reinforcement learning.","https://github.com/xxia99/bqc_scheduling"),
-       ("Scenario generation for integrated energy systems","Scenario generation with a Wasserstein DCGAN.","https://github.com/xxia99/DCGAN-for-Scenario-Generation"),
-       ("2048 with deep Q-learning","A DQN agent that plays 2048, with a web demo.",""),
-       ("Patient outcome prediction from text","Tabular patient records converted to text for classification.","https://github.com/xxia99/Text-Classification"),
-       ("Weather forecasting with a foundation model","Time-MoE compared with SARIMA and Seq2Seq baselines.","")]
-COURSE=[("C++ projects","Nine problems, from Langton's ant to a 3D UAV show simulation.","https://github.com/xxia99/Cpp-Projects"),
-        ("Signal processing with MATLAB","Eight problems and four projects in digital signal processing.","https://github.com/xxia99/DSP-with-MATLAB")]
-def _cards(L): return '<div class="pgrid three">'+"".join((('<a class="pcard text" href="%s" target="_blank" rel="noopener">'%u) if u else '<div class="pcard text">')+'<div class="b"><h3>%s</h3><p>%s</p></div>'%(n,d)+('</a>' if u else '</div>') for n,d,u in L)+'</div>'
-proj+='<h2>Open-source mini-projects</h2>'+_cards(MINIS)+'</section>'
+MINIS=[("Scenario generation for integrated energy systems","Scenario generation with a Wasserstein DCGAN.","https://github.com/xxia99/DCGAN-for-Scenario-Generation",
+        dict(video="images/mini/gan_training.mp4",poster="images/mini/gan_training.jpg",cap="Generated daily scenarios during training")),
+       ("2048 with deep Q-learning","A DQN agent that plays 2048, with a web demo.","",
+        dict(video="images/mini/g2048_play.mp4",poster="images/mini/g2048_play.jpg",cap="The trained agent playing 2048")),
+       ("Patient outcome prediction from text","Tabular patient records converted to text for classification.","https://github.com/xxia99/Text-Classification",
+        dict(image="images/mini/text_curves.png",cap="Training loss with and without a pretrained embedding layer")),
+       ("Power outage forecasting","Hourly county-level outage forecasts from weather data.","https://github.com/xxia99/weather_prediction",
+        dict(image="images/mini/outage_forecast.svg",cap="Observed and forecast outages over ten validation days"))]
+def _mini(n,d,u,m):
+    cov=""
+    if m and "video" in m:
+        cov='<a class="cover contain" href="%s" data-lb="%s" data-video="%s"><video src="%s" poster="%s" muted loop playsinline autoplay preload="metadata"></video></a>'%(m["poster"],m["cap"],m["video"],m["video"],m["poster"])
+    elif m:
+        cov='<a class="cover contain" href="%s" data-lb="%s"><img src="%s" alt="%s" loading="lazy"></a>'%(m["image"],m["cap"],m["image"],m["cap"])
+    t='<a href="%s" target="_blank" rel="noopener">%s</a>'%(u,n) if u else n
+    return '<div class="pcard mini">%s<div class="b"><h3>%s</h3><p>%s</p></div></div>'%(cov,t,d)
+proj+='<h2>Open-source mini-projects</h2><div class="pgrid three">'+"".join(_mini(*x) for x in MINIS)+'</div></section>'
 open(os.path.join(ROOT,"projects.html"),"w").write(shell("Projects - Xin Xia",proj,"projects"))
 for t in THEMES:
     body='<section><p class="back"><a href="projects.html">&larr; All projects</a></p><h1 class="ph">%s</h1>'%t["title"]
