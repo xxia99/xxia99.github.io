@@ -17,7 +17,7 @@ PUBS=[
  dict(k="scan",badge="INFORMS",title="SCAN: Networked Multi-Agent Reinforcement Learning for Decentralized Anomaly Detection in Graph-Structured Systems",
       au="<b>Xin Xia</b> and Kaibo Liu",venue="INFORMS Annual Meeting, 2026",status="journal version in preparation",award='<b class="win">Winner</b>INFORMS QSR Best Refereed Paper Award, 2026',award_url="https://connect.informs.org/discussion/informs-2026-best-referred-paper-competition-finalists#:~:text=SCAN%3A%20Networked%20Multi-Agent%20Reinforcement%20Learning",
       abs="Each drone learns from its own evidence and a few messages from neighbours, moves safely under mobility constraints, and the team raises a calibrated alarm. Demonstrated on wildfire and traffic cases with a drone fleet in a 3D simulator.",
-      links=[("Demo","images/fulls/scan.jpg"),("Poster","data/posters/INFORMS2026_SCAN_poster.pdf")],year="2026",cap="SCAN: drone fleet in the wildfire simulator (overview, chase view, HUD)",lab="Demo",sel=True),
+      links=[("Demo","images/fulls/scan.jpg")],year="2026",cap="SCAN: drone fleet in the wildfire simulator (overview, chase view, HUD)",lab="Demo",sel=True),
  dict(k="hass",badge="Technometrics",title="Multi-Agent Reinforcement Learning for Anomaly Detection with Hierarchical Adaptive Sampling Strategy",
       au="<b>Xin Xia</b>, Jie Guo, Ziqian Zheng, Yujie Ma, Chen Zhang, and Kaibo Liu",venue="Technometrics",status="accepted",award="Finalist, IISE QCRE Best Track Paper Competition, 2025",award_url="https://myemail.constantcontact.com/QCRE-News---May-2025.html?aid=vKcqr1w06AU&amp;soid=1101700049774#:~:text=Interactive%20Resource%20Planning%20and%20Change%20Detection",
       abs="Limited monitoring resources are allocated across many data streams by a hierarchy of learned agents, so that the streams most likely to carry the change are observed first.",
@@ -115,7 +115,7 @@ SHORT={"dispatchppo":"Collision-free dispatch for route-wise anomaly detection",
        "msom":"Multi-level decision-making for supply chain resilience","causal":"Multi-agent causal discovery with LLMs"}
 
 THEMES=[
- dict(slug="language-models",q="How to represent data",title="Multimodal data fusion and prediction",short="Multimodal data fusion",tech="Foundation models, LLMs",
+ dict(slug="language-models",q="How to represent and predict",title="Multimodal data fusion and prediction",short="Multimodal data fusion",tech="Foundation models, LLMs",
       desc="Pretrained language models for keyphrase generation and patent analysis, and LLM agents that debate to discover causal structure.",
       cover="images/covers/language-models.png",fit="contain",keys=["kappa","causal"]),
  dict(slug="multi-agent",q="What to observe",title="Real-time anomaly detection",short="Real-time anomaly detection",tech="Deep reinforcement learning (RL)",
@@ -152,11 +152,12 @@ def award_html(p):
     return ('<%s %sclass="aw"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/></svg>%s</%s>'%(tag[0],tag[1],p["award"].replace('<b class="win">Winner</b>',"Winner, "),tag[0]))
 def buttons(p,project=True):
     out="".join('<a href="%s" target="_blank" rel="noopener">%s</a>'%(u,l) for l,u in p["links"] if not u.startswith("images/"))
-    if project and p["k"] in PAGE_OF: out+='<a href="%s#proj-%s">Project</a>'%(PAGE_OF[p["k"]],p["k"])
     return out
-def cite(p):
+def cite(p,link=True):
+    ti=p["title"]
+    if link and p["k"] in PAGE_OF: ti='<a href="%s#proj-%s">%s</a>'%(PAGE_OF[p["k"]],p["k"],ti)
     status=' <span class="st">(%s)</span>'%p["status"] if p["status"] else ""
-    return '<h3 class="t">%s</h3><div class="au">%s</div><div class="ve">%s%s</div>%s'%(p["title"],p["au"],p["venue"],status,award_html(p))
+    return '<h3 class="t">%s</h3><div class="au">%s</div><div class="ve">%s%s</div>%s'%(ti,p["au"],p["venue"],status,award_html(p))
 
 def pub_html(p):
     k=p["k"]
@@ -175,7 +176,7 @@ def gallery(ms):
     return '<div class="gallery">%s</div>'%"".join(rows)
 def proj_html(p):
     return ('<article class="proj" id="proj-%s">%s<p class="abs">%s</p><div class="btns">%s</div>%s</article>'
-            %(p["k"],cite(p),p["abs"],buttons(p,project=False),gallery(DEMOS[p["k"]]) if p["k"] in DEMOS else ""))
+            %(p["k"],cite(p,link=False),p["abs"],buttons(p,project=False),gallery(DEMOS[p["k"]]) if p["k"] in DEMOS else ""))
 
 # ---------------------------------------------------------------- page shell
 DESC="Xin Xia - Ph.D. candidate in Industrial Engineering at the University of Wisconsin-Madison. Reliable decisions in budgeted systems: multimodal foundation models, statistical process control, bilevel optimization, and multi-agent reinforcement learning."
@@ -243,7 +244,7 @@ AW2='https://myemail.constantcontact.com/QCRE-News---May-2025.html?aid=vKcqr1w06
 FOUR=(' My work covers four directions: <a href="project-fleets.html">robot and drone fleets for anomaly detection</a>, <a href="project-multi-agent.html">multi-agent systems for decision making</a>, <a href="project-language-models.html">foundation models and large language models</a>, and <a href="project-supply-chain.html">AI-driven supply chain management</a>.') if os.environ.get("PLAN","c")=="c" else ""
 hero=f"""<section id="about"><header class="hero"><div><h1><b>Xin</b> Xia</h1>
 <p>I am a Ph.D. candidate in <a href="https://engineering.wisc.edu/departments/industrial-systems-engineering/">Industrial and Systems Engineering</a> at the University of Wisconsin-Madison, advised by <a href="https://kaibo.ie.wisc.edu/index.html">Prof. Kaibo Liu</a>. I received my M.Sc. in Electrical and Computer Engineering from Georgia Tech and my B.Eng. in Electrical Engineering and Automation from Tianjin University.</p>
-<p>My research addresses how to make reliable decisions in budgeted systems, where sensing and action resources are limited. This involves four questions: how to represent heterogeneous data, what to observe, how to act, and how to coordinate multiple decision makers. To this end, I work on multimodal foundation models, statistical process control, bilevel optimization, multi-agent reinforcement learning, and multi-robot path planning. Applications include <a href="project-language-models.html">multimodal data fusion and prediction</a>, <a href="project-multi-agent.html">real-time anomaly detection</a>, <a href="project-supply-chain.html">resilience of networked systems</a>, and <a href="project-fleets.html">coordinated control of robot and drone fleets</a>.</p>
+<p>My research addresses how to make reliable decisions in budgeted systems, where sensing and action resources are limited. This involves four questions: how to represent heterogeneous data, what to observe, how to act, and how to coordinate multiple decision makers. To this end, I work on foundation models <span class="par">(LLMs, VLMs)</span>, statistical process control <span class="par">(sequential change detection, adaptive sampling)</span>, bilevel optimization <span class="par">(Stackelberg games)</span>, multi-agent reinforcement learning, and multi-robot path planning. Applications include <a href="project-language-models.html">multimodal data fusion and prediction</a>, <a href="project-multi-agent.html">real-time anomaly detection</a>, <a href="project-supply-chain.html">resilience of networked systems</a>, and <a href="project-fleets.html">coordinated control of robot and drone fleets</a>.</p>
 <p>My work has appeared in NeurIPS, <em>Technometrics</em>, <em>IEEE Transactions on Engineering Management</em>, and the <em>International Journal of Production Economics</em>. It received the <a class="hot" href="{AW1}" target="_blank" rel="noopener">INFORMS QSR Best Refereed Paper Award</a> (2026) and was a finalist in the <a class="hot" href="{AW2}" target="_blank" rel="noopener">IISE QCRE Best Track Paper Competition</a> (2025). I serve as a reviewer for NeurIPS, <em>IEEE Transactions on Automation Science and Engineering</em>, <em>PNAS</em>, and <em>PNAS Nexus</em>.</p>
 <p class="links"><a href="mailto:xxia65@wisc.edu">Email</a><a href="data/XinXia-CV.pdf">CV</a><a href="https://scholar.google.com/citations?user=baRH_vIAAAAJ&amp;hl=en">Google Scholar</a><a href="https://github.com/xxia99">GitHub</a><a href="https://www.linkedin.com/in/xin-xia-678546204/" target="_blank" rel="noopener">LinkedIn</a><a href="https://orcid.org/0009-0006-2910-7778" target="_blank" rel="noopener">ORCID</a></p>
 </div><div class="pic"><img src="images/avatar.jpg" alt="Xin Xia"><div class="addr">Department of Industrial and<br>Systems Engineering<br>University of Wisconsin-Madison<br>xxia65@wisc.edu</div></div></header></section>"""
@@ -267,7 +268,7 @@ for g in ["2026","2025","2024","Under review"]:
 research+='</section>'
 TIMELINE=[("2025 - present","Ph.D. candidate, University of Wisconsin-Madison","Industrial and Systems Engineering. Advisor: Prof. Kaibo Liu.","uw.svg","University of Wisconsin-Madison",""),
           ("2022 - 2025","Research assistant, Tsinghua University",'<a href="https://thu-sail-lab.github.io/home/" target="_blank" rel="noopener">SAIL Lab</a>. Advisor: <a href="https://www.ie.tsinghua.edu.cn/eng/info/1051/1031.htm" target="_blank" rel="noopener">Prof. Chen Zhang</a>.',"tsinghua.svg","Tsinghua University",""),
-          ("2021 - 2022","AI researcher intern, Ping An Technology","Multimodal document understanding; two invention patents.","pingan.svg","Ping An"," wide"),
+          ("2021 - 2022","AI researcher intern, Ping An Technology","Multimodal document understanding; two invention patents.","pingan-tech.png","Ping An Technology"," wide pa"),
           ("2020 - 2022","M.Sc., Georgia Institute of Technology","Electrical and Computer Engineering.","gatech.svg","Georgia Institute of Technology",""),
           ("2016 - 2020","B.Eng., Tianjin University","Electrical Engineering and Automation.","tju.png","Tianjin University","")]
 cv='<section id="experience"><h2>Experience</h2><div class="vt">'+"".join(
@@ -313,13 +314,14 @@ BYK={p["k"]:p for p in PUBS}
 def entry(tag,p):
     status=' <span class="st">(%s)</span>'%p["status"] if p["status"] else ""
     links=[(l,u) for l,u in p["links"] if not u.startswith("images/")]
-    if p["k"] in PAGE_OF: links.append(("Project","%s#proj-%s"%(PAGE_OF[p["k"]],p["k"])))
+    ti=p["title"]
+    if p["k"] in PAGE_OF: ti='<a href="%s#proj-%s">%s</a>'%(PAGE_OF[p["k"]],p["k"],ti)
     ln=" ".join('<a href="%s"%s>%s</a>'%(u,"" if u.startswith("project-") else ' target="_blank" rel="noopener"',l) for l,u in links)
     aw=""
     if p["award"]:
         txt=p["award"].replace('<b class="win">Winner</b>',"Winner, ")
         aw=' <span class="awi">%s</span>'%(('<a href="%s" target="_blank" rel="noopener">%s</a>'%(p["award_url"],txt)) if p.get("award_url") else txt)
-    return '<li id="%s"><span class="tag">[%s]</span><div>%s. <span class="pt">%s.</span> <em>%s</em>%s.%s<div class="pl">%s</div></div></li>'%(p["k"],tag,p["au"].replace(", and "," and ") if p["au"].count(",")<2 else p["au"],p["title"],p["venue"],status,aw,ln)
+    return '<li id="%s"><span class="tag">[%s]</span><div>%s. <span class="pt">%s.</span> <em>%s</em>%s.%s<div class="pl">%s</div></div></li>'%(p["k"],tag,p["au"].replace(", and "," and ") if p["au"].count(",")<2 else p["au"],ti,p["venue"],status,aw,ln)
 pubs='<section id="publications"><h1>Publications</h1>'
 for title,letter,keys in GROUPS:
     n=len(keys)
