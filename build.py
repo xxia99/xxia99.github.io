@@ -115,16 +115,16 @@ SHORT={"dispatchppo":"Collision-free dispatch for route-wise anomaly detection",
        "msom":"Multi-level decision-making for supply chain resilience","causal":"Multi-agent causal discovery with LLMs"}
 
 THEMES=[
- dict(slug="language-models",q="How to represent data",title="Multimodal data fusion and prediction",
+ dict(slug="language-models",q="How to represent data",title="Multimodal data fusion and prediction",short="Multimodal data fusion",tech="Foundation models, LLMs",
       desc="Pretrained language models for keyphrase generation and patent analysis, and LLM agents that debate to discover causal structure.",
       cover="images/covers/language-models.png",fit="contain",keys=["kappa","causal"]),
- dict(slug="multi-agent",q="What to observe",title="Real-time anomaly detection",
+ dict(slug="multi-agent",q="What to observe",title="Real-time anomaly detection",short="Real-time anomaly detection",tech="Deep reinforcement learning (RL)",
       desc="Hierarchical and cooperative agents that allocate limited resources and coordinate decisions in large systems.",
       cover="images/covers/multi-agent.png",fit="contain",keys=["hass","iise"]),
- dict(slug="supply-chain",q="How to act",title="Resilience of networked systems",
+ dict(slug="supply-chain",q="How to act",title="Resilience of networked systems",short="Resilience of networked systems",tech="Stackelberg game, bilevel optimization",
       desc="Deep reinforcement learning for bilevel problems in product design, remanufacturing and resilient supply chains.",
       cover="images/covers/supply-chain.png",fit="contain",keys=["bsac","ijpe","msom"]),
- dict(slug="fleets",q="How to coordinate",title="Coordinated control of robot and drone fleets",
+ dict(slug="fleets",q="How to coordinate",title="Coordinated control of robot and drone fleets",short="Robot and drone fleet control",tech="Multi-agent RL, multi-robot path planning",
       desc="Dispatch and sampling policies that let fleets of mobile sensors detect anomalies quickly while keeping false alarms under control.",
       cover="images/covers/fleets.png",fit="contain",keys=["dispatchppo","scan"]),
 ]
@@ -282,13 +282,13 @@ def card(t):
     return ('<a class="pcard" href="project-%s.html"><div class="cover %s"><img src="%s" alt="" loading="lazy"></div><div class="b"><h3>%s</h3></div></a>'
             %(t["slug"],t["fit"],t["cover"],t["title"]))
 proj='<section id="projects"><h1>Projects</h1>'
-proj+=('<h2>Research</h2><div class="dia"><div class="dtop"><b>Reliable decisions in budgeted systems</b><span>where sensing and action resources are limited</span></div><div class="dcols">'
-  +"".join('<a class="dcol" href="project-%s.html"><div class="dq">%s</div><div class="dbox">%s</div><div class="dimg %s"><img src="%s" alt="" loading="lazy"></div></a>'%(t["slug"],t["q"],t["title"],t["fit"],t["cover"]) for t in THEMES)+'</div></div>')
-MINIS=[("Scenario generation for integrated energy systems","Scenario generation with a Wasserstein DCGAN.","https://github.com/xxia99/DCGAN-for-Scenario-Generation",
+proj+=('<h2><span><b>Research projects:</b> reliable decisions in budgeted systems</span></h2><div class="dia chev"><div class="dcols">'
+  +"".join('<a class="dcol" href="project-%s.html"><div class="dq">%s</div><div class="dimg %s"><img src="%s" alt="" loading="lazy"></div><div class="dbox">%s</div><div class="dtech">%s</div></a>'%(t["slug"],t["q"],t["fit"],t["cover"],t["short"],t["tech"]) for t in THEMES)+'</div></div>')
+MINIS=[("Energy system scenario generation","DCGAN, Wasserstein GAN","https://github.com/xxia99/DCGAN-for-Scenario-Generation",
         dict(video="images/mini/gan_training.mp4",poster="images/mini/gan_training.jpg",cap="Generated daily scenarios during training")),
-       ("Patient outcome prediction from text","Tabular patient records converted to text for classification.","https://github.com/xxia99/Text-Classification",
+       ("Patient outcome prediction from text","Tabular-to-text conversion, BERT embeddings, MLP classifier","https://github.com/xxia99/Text-Classification",
         dict(image="images/mini/text_curves.png",cap="Training loss with and without a pretrained embedding layer")),
-       ("Power outage forecasting","Hourly county-level outage forecasts from weather data.","https://github.com/xxia99/weather_prediction",
+       ("Power outage forecasting","Time-series foundation models, LoRA, TCN","https://github.com/xxia99/weather_prediction",
         dict(image="images/mini/outage_forecast.svg",cap="Observed and forecast outages over ten validation days"))]
 def _mini(n,d,u,m):
     cov=""
@@ -298,7 +298,7 @@ def _mini(n,d,u,m):
         cov='<a class="cover contain" href="%s" data-lb="%s"><img src="%s" alt="%s" loading="lazy"></a>'%(m["image"],m["cap"],m["image"],m["cap"])
     t='<a href="%s" target="_blank" rel="noopener">%s</a>'%(u,n) if u else n
     return '<div class="pcard mini">%s<div class="b"><h3>%s</h3><p>%s</p></div></div>'%(cov,t,d)
-proj+='<h2>Open-source mini-projects</h2><div class="pgrid three">'+"".join(_mini(*x) for x in MINIS)+'</div></section>'
+proj+='<h2><b>Mini projects</b></h2><div class="pgrid three">'+"".join(_mini(*x) for x in MINIS)+'</div></section>'
 open(os.path.join(ROOT,"projects.html"),"w").write(shell("Projects - Xin Xia",proj,"projects"))
 for t in THEMES:
     body='<section><p class="back"><a href="projects.html">&larr; All projects</a></p><h1 class="ph">%s</h1>'%t["title"]

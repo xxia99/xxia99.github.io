@@ -103,3 +103,18 @@ ul.plain{padding-left:18px;margin:8px 0}ul.plain li{margin:6px 0}.mono{font-fami
 a.hot{color:var(--hot)}
 .pcard.mini:hover{transform:none;box-shadow:none}.pcard.mini .cover{aspect-ratio:16/10;cursor:zoom-in}.pcard.mini .cover.contain img,.pcard.mini .cover video{width:100%;height:100%;object-fit:contain;padding:10px;box-sizing:border-box}
 .pcard.mini h3{font-size:17px}.pcard.mini h3 a{color:var(--ink)}.pcard.mini h3 a:hover{color:var(--accent)}
+
+.chev{margin-top:14px}
+.chev .dcol{padding-top:0}
+.chev .dcol::before,.chev .dimg::before,.chev .dq::after{display:none}
+.chev .dq{background:var(--accent);color:#fff;font-size:14px;padding:9px 16px 9px 22px;margin-right:-12px;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%,14px 50%)}
+.chev .dcol:first-child .dq{clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%)}
+.chev .dcol:last-child .dq{margin-right:0}
+.chev .dimg{margin-top:12px}
+.chev .dbox{border:0;border-radius:0;background:none;min-height:0;padding:10px 0 0;font-size:16px;white-space:nowrap}
+.chev .dcol:hover .dbox{background:none;color:var(--accent)}
+.dtech{text-align:center;font-size:13.5px;line-height:1.35;color:var(--muted);padding-top:2px}
+@media (max-width:980px){.chev .dbox{white-space:normal}}
+@media (max-width:760px){.chev .dq{margin-right:0}}
+h2 b{font-weight:500}
+.pcard.mini h3{font-size:16px;line-height:1.3}.pcard.mini p{font-size:13.5px;line-height:1.35;color:var(--muted);margin-top:2px}
