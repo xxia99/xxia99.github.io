@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Generate the static pages of xxia99.github.io (al-folio-style). Run: python build.py"""
+"""Generate the one-page site xxia99.github.io (al-folio style, half-and-half research rows). Run: python build.py"""
 import os
 ROOT=os.path.dirname(os.path.abspath(__file__))
 
 NAV=[("index.html","about"),("publications.html","publications"),("projects.html","projects"),("news.html","news"),("cv.html","cv")]
 BIO1="My research combines multi-agent reinforcement learning with statistical process control. Where a mobile sensor goes decides what is observed, so I design learning-based sampling and dispatch policies that let fleets of agents, such as unmanned aerial vehicles, detect anomalies quickly in large systems while keeping false alarms under control, with guarantees on coverage, focusing, and detection delay."
-BIO2='Before Madison, I was a research assistant in the <a href="https://thuie-isda.github.io">Industrial Statistics and Data Analytics Lab</a> at Tsinghua University, advised by <a href="https://thuie-isda.github.io/About%20the%20Principal/">Prof. Chen Zhang</a>, working on deep reinforcement learning for bilevel optimization in supply chain and manufacturing systems. I hold an M.Sc. in Electrical and Computer Engineering from Georgia Tech and a B.Eng. in Electrical Engineering and Automation from Tianjin University.'
+BIO2='Before Madison, I was a research assistant in the <a href="https://thu-sail-lab.github.io/home/">Superintelligence and Industrial Lab (SAIL)</a> at Tsinghua University, advised by <a href="https://www.ie.tsinghua.edu.cn/eng/info/1051/1031.htm">Prof. Chen Zhang</a>, working on deep reinforcement learning for bilevel optimization in supply chain and manufacturing systems. I hold an M.Sc. in Electrical and Computer Engineering from Georgia Tech and a B.Eng. in Electrical Engineering and Automation from Tianjin University.'
 INTERESTS="multi-agent reinforcement learning, sequential change detection, adaptive sampling and dispatch, statistical process control, unmanned aerial vehicles, bilevel optimization, resilient supply chains, language models for text mining"
 
 # key, badge, title, authors, venue, status, award, summary, links, year-group, preview caption, hover label
@@ -13,69 +13,190 @@ PUBS=[
  dict(k="dispatchppo",badge="NeurIPS",title="Learning Collision-Free Dispatch Policies for Route-Wise Decision-Dependent Anomaly Detection",
       au="<b>Xin Xia</b>, Chen Zhang, and Kaibo Liu",venue="Advances in Neural Information Processing Systems (NeurIPS), 2026",status="",award="",
       abs="A dispatch policy for UAV fleets that assigns destinations one vehicle at a time, so joint moves are collision-free by construction and decoded in linear time, with guarantees on coverage, focusing, and detection delay. Validated on the Robotarium and on a wildfire rebuilt from satellite frames.",
-      links=[("Poster","images/fulls/dispatchppo.jpg")],year="2026",cap="NeurIPS 2026 poster",lab="Poster",sel=True),
+      links=[("Poster","data/posters/NeurIPS2026_DispatchPPO_poster.pdf")],year="2026",cap="NeurIPS 2026 poster",lab="Poster",sel=True),
  dict(k="scan",badge="INFORMS",title="SCAN: Networked Multi-Agent Reinforcement Learning for Decentralized Anomaly Detection in Graph-Structured Systems",
-      au="<b>Xin Xia</b> and Kaibo Liu",venue="INFORMS Annual Meeting, 2026",status="journal version in preparation",award="INFORMS QSR Best Refereed Paper Award, 2026",
+      au="<b>Xin Xia</b> and Kaibo Liu",venue="INFORMS Annual Meeting, 2026",status="journal version in preparation",award='<b class="win">Winner</b>INFORMS QSR Best Refereed Paper Award, 2026',award_url="https://connect.informs.org/discussion/informs-2026-best-referred-paper-competition-finalists#:~:text=SCAN%3A%20Networked%20Multi-Agent%20Reinforcement%20Learning",
       abs="Each drone learns from its own evidence and a few messages from neighbours, moves safely under mobility constraints, and the team raises a calibrated alarm. Demonstrated on wildfire and traffic cases with a drone fleet in a 3D simulator.",
-      links=[("Demo","images/fulls/scan.jpg")],year="2026",cap="SCAN: drone fleet in the wildfire simulator (overview, chase view, HUD)",lab="Demo",sel=True),
+      links=[("Demo","images/fulls/scan.jpg"),("Poster","data/posters/INFORMS2026_SCAN_poster.pdf")],year="2026",cap="SCAN: drone fleet in the wildfire simulator (overview, chase view, HUD)",lab="Demo",sel=True),
  dict(k="hass",badge="Technometrics",title="Multi-Agent Reinforcement Learning for Anomaly Detection with Hierarchical Adaptive Sampling Strategy",
-      au="<b>Xin Xia</b>, Jie Guo, Ziqian Zheng, Yujie Ma, Chen Zhang, and Kaibo Liu",venue="Technometrics",status="conditionally accepted",award="Finalist, IISE QCRE Best Track Paper Competition, 2025",
+      au="<b>Xin Xia</b>, Jie Guo, Ziqian Zheng, Yujie Ma, Chen Zhang, and Kaibo Liu",venue="Technometrics",status="accepted",award="Finalist, IISE QCRE Best Track Paper Competition, 2025",award_url="https://myemail.constantcontact.com/QCRE-News---May-2025.html?aid=vKcqr1w06AU&amp;soid=1101700049774#:~:text=Interactive%20Resource%20Planning%20and%20Change%20Detection",
       abs="Limited monitoring resources are allocated across many data streams by a hierarchy of learned agents, so that the streams most likely to carry the change are observed first.",
-      links=[("Figure","images/fulls/hass.jpg")],year="2026",cap="Hierarchical adaptive sampling: framework overview",lab="Figure",sel=True),
+      links=[("Figure","images/fulls/hass.svg"),("Testbed","images/fulls/hass_iot.svg"),("Poster","data/posters/Technometrics_PAD_poster.pdf")],year="2026",img="images/fulls/hass.svg",ar=' style="aspect-ratio:1466/526"',cap="Hierarchical adaptive sampling: framework overview",lab="Figure",fig="Flat and hierarchical system structures",sel=True),
  dict(k="kappa",badge="IJDS",title="KAPPA: A Generic Patent Analysis Framework with Keyphrase-Based Portraits",
       au="<b>Xin Xia</b>, Yujin Wang, Jun Zhou, Guisheng Zhong, Linning Cai, Kaibo Liu, and Chen Zhang",venue="INFORMS Journal on Data Science",status="major revision",award="",
       abs="Patents are summarised into keyphrase portraits generated by a pretrained language model, which then support retrieval, clustering, and trend analysis.",
-      links=[("Code","https://github.com/xxia99/SetPLM")],year="2026",cap="",lab=""),
+      links=[("Code","https://github.com/xxia99/SetPLM"),("Model","images/fulls/kappa_model.svg")],year="2026",cap="KAPPA: portrait generation and portrait-based analytics",lab="Figure",img="images/fulls/kappa.svg",ar=' style="aspect-ratio:835/335"',fig="Framework overview"),
  dict(k="bsac",badge="IEEE TEM",title="A Deep Reinforcement Learning Method Solving Bilevel Optimization for Product Design Considering Remanufacturing",
       au="Yujie Ma, <b>Xin Xia</b>, and Chen Zhang",venue="IEEE Transactions on Engineering Management, 72, 573-590, 2025",status="",award="",
       abs="Product design as the leader and remanufacturing as the follower in a Stackelberg game, solved by a bilevel SAC algorithm (BSAC) with convergence and optimality guarantees.",
-      links=[("DOI","https://doi.org/10.1109/TEM.2025.3535771"),("Poster","images/fulls/bsac.jpg")],year="2025",cap="Poster: solving bilevel optimization with deep reinforcement learning (INFORMS QSR 2025)",lab="Poster"),
+      links=[("DOI","https://doi.org/10.1109/TEM.2025.3535771"),("Poster","data/posters/INFORMS2025_QSR_BSAC_poster.pdf")],year="2025",pdf="data/posters/INFORMS2025_QSR_BSAC_poster.pdf",cap="Poster: solving bilevel optimization with deep reinforcement learning (INFORMS QSR 2025)",lab="Poster",fig="Poster, 2025 INFORMS Annual Meeting"),
  dict(k="ijpe",badge="IJPE",title="Bilevel Joint Optimization for Product Design Changes with a Resilient Supply Chain Based on Deep Reinforcement Learning",
       au="Yujie Ma, <b>Xin Xia</b>, Peng Liu, and Chen Zhang",venue="International Journal of Production Economics, 290, 109791, 2025",status="",award="",
       abs="Design changes and the supply chain that must absorb them are optimised together under disruption risk.",
-      links=[("DOI","https://doi.org/10.1016/j.ijpe.2025.109791")],year="2025",cap="",lab=""),
+      links=[("DOI","https://doi.org/10.1016/j.ijpe.2025.109791")],year="2025",cap="Policy and value networks of the adapted SAC for the bilevel joint optimization model",lab="Figure",img="images/fulls/ijpe.png",ar=' style="aspect-ratio:2028/595"',fig="Policy and value networks of the adapted SAC"),
  dict(k="msom",badge="M&amp;SOM",title="Strengthening Supply Chain Resilience Through Coordinating Optimization of Product Design and Inventory Management: A Multi-Agent Deep Reinforcement Learning Approach",
       au="Yujie Ma, <b>Xin Xia</b>, Chen Zhang, and Nan Chen",venue="Manufacturing &amp; Service Operations Management",status="submitted",award="",
-      abs="A multi-agent deep reinforcement learning approach in which each echelon learns to cooperate with its upstream and downstream neighbours.",links=[],year="Under review",cap="",lab=""),
+      abs="A multi-agent deep reinforcement learning approach in which each echelon learns to cooperate with its upstream and downstream neighbours.",links=[],year="Under review",cap="A bilevel supply chain system: platform as leader, supply chain members as followers",lab="Figure",img="images/fulls/msom.svg",ar=' style="aspect-ratio:296/158"',fig="Bilevel supply chain system"),
  dict(k="iise",badge="IISE Trans.",title="Quality-Driven Multi-Agent Coordination in Multi-Stage Manufacturing Systems: A Distributionally Robust Bilevel Optimization Framework with Reinforcement Learning",
       au="Yujie Ma, Jie Guo, <b>Xin Xia</b>, and Chen Zhang",venue="IISE Transactions",status="under review",award="",
       abs="A distributionally robust bilevel optimization framework with reinforcement learning for coordinating quality decisions across manufacturing stages.",links=[],year="Under review",cap="",lab=""),
  dict(k="causal",badge="arXiv",title="Multi-Agent Causal Discovery Using Large Language Models",
       au="Hao Duong Le, <b>Xin Xia</b>, Haijie Xu, and Chen Zhang",venue="arXiv:2407.15073, 2024",status="",award="",
       abs="Several LLM agents with different roles debate and vote on causal edges, combining metadata with observational data.",
-      links=[("arXiv","https://arxiv.org/abs/2407.15073")],year="Preprints",cap="arXiv:2407.15073, first page",lab="Preprint"),
+      links=[("arXiv","https://arxiv.org/abs/2407.15073")],year="2024",cap="arXiv:2407.15073, first page",lab="Preprint",fig="Preprint, arXiv:2407.15073"),
 ]
-PATENTS=[("CN115205869A","P. Liu, <b>X. Xia</b>, Z. Yan, Y. Liu, J. Xiao.",'<a href="https://cprs.patentstar.com.cn/Search/Detail?ANE=9GBA9FFB9EEB9FDB9GCA8GCA9ACA8EDA9FIF8GBA9FGH9GIG">Generation, implementation, electronic devices, and storage media for structured document information</a>'),
-         ("CN114661545A","P. Liu, L. Huang, X. Yu, <b>X. Xia</b>, Y. Liu, J. Xiao.",'<a href="https://cprs.patentstar.com.cn/Search/Detail?ANE=9DFB9GIF8AGA6EAA9EGC9IFE9FHF5CDA9HEC4BCA9IAE9GGH">Method, implementation, devices, and storage media for monitoring of processor resources</a>')]
-NEWS=[("Nov 2026","Our paper <em>SCAN</em> on networked multi-agent reinforcement learning for decentralized anomaly detection received the Best Refereed Paper Award of the INFORMS QSR section at the 2026 INFORMS Annual Meeting, San Francisco."),
-      ("Sep 2026","<em>Learning Collision-Free Dispatch Policies for Route-Wise Decision-Dependent Anomaly Detection</em> accepted at NeurIPS 2026."),
-      ("2026","<em>Multi-Agent Reinforcement Learning for Anomaly Detection with Hierarchical Adaptive Sampling Strategy</em> conditionally accepted by <em>Technometrics</em>."),
-      ("May 2025","Finalist, IISE QCRE Best Track Paper Competition, 2025 IISE Annual Meeting."),
-      ("Jan 2025","Started my Ph.D. at the University of Wisconsin-Madison."),
-      ("Jan 2025","<em>A Deep Reinforcement Learning Method Solving Bilevel Optimization for Product Design Considering Remanufacturing</em> published in <em>IEEE Transactions on Engineering Management</em>."),
-      ("Jul 2024","Preprint <em>Multi-Agent Causal Discovery Using Large Language Models</em> on arXiv.")]
+PATENTS=[("CN115205869A","P. Liu, <b>X. Xia</b>, Z. Yan, Y. Liu, J. Xiao.",'<a href="https://patents.google.com/patent/CN115205869A/en">Generation, implementation, electronic devices, and storage media for structured document information</a>'),
+         ("CN114661545A","P. Liu, L. Huang, X. Yu, <b>X. Xia</b>, Y. Liu, J. Xiao.",'<a href="https://patents.google.com/patent/CN114661545A/en">Method, implementation, devices, and storage media for monitoring of processor resources</a>')]
+NEWS=[('Nov 2026','Honored that <a class="nt" href="project-fleets.html#proj-scan"><em>SCAN: Networked Multi-Agent Reinforcement Learning for Decentralized Anomaly Detection in Graph-Structured Systems</em></a> won the <a class="hot" href="https://connect.informs.org/discussion/informs-2026-best-referred-paper-competition-finalists#:~:text=SCAN%3A%20Networked%20Multi-Agent%20Reinforcement%20Learning" target="_blank" rel="noopener">INFORMS QSR Best Refereed Paper Award</a> at the 2026 INFORMS Annual Meeting in San Francisco!'),
+      ('Nov 2026','Enjoyed giving an <a href="talks.html">invited talk</a> on <a class="nt" href="project-fleets.html#proj-dispatchppo"><em>Learning Collision-Free Dispatch Policies for Route-Wise Decision-Dependent Anomaly Detection</em></a> at the 2026 INFORMS Annual Meeting in San Francisco.'),
+      ('Nov 2026','Happy to share that <a class="nt" href="project-multi-agent.html#proj-hass"><em>Multi-Agent Reinforcement Learning for Anomaly Detection with Hierarchical Adaptive Sampling Strategy</em></a> has been accepted by <em>Technometrics</em>.'),
+      ('Sep 2026','Excited that <a class="nt" href="project-fleets.html#proj-dispatchppo"><em>Learning Collision-Free Dispatch Policies for Route-Wise Decision-Dependent Anomaly Detection</em></a> has been accepted at NeurIPS 2026!'),
+      ('Oct 2025','Had a great time giving an <a href="talks.html">invited talk</a>, <em>Interactive Resource Allocation and Anomaly Detection via Multi-Agent Reinforcement Learning</em>, at the 2025 INFORMS Annual Meeting in Atlanta.'),
+      ('Sep 2025','Our paper <a class="nt" href="project-supply-chain.html#proj-ijpe"><em>Bilevel Joint Optimization for Product Design Changes with a Resilient Supply Chain Based on Deep Reinforcement Learning</em></a> is now published in <em>International Journal of Production Economics</em>.'),
+      ('May 2025','Glad that <em>Interactive Resource Planning and Change Detection via Multi-agent Reinforcement Learning</em> was selected as a <a class="hot" href="https://myemail.constantcontact.com/QCRE-News---May-2025.html?aid=vKcqr1w06AU&amp;soid=1101700049774#:~:text=Interactive%20Resource%20Planning%20and%20Change%20Detection" target="_blank" rel="noopener">finalist of the IISE QCRE Best Track Paper Competition</a> at the 2025 IISE Annual Conference in Atlanta.'),
+      ('Jan 2025','Thrilled to start my Ph.D. at the University of Wisconsin-Madison with Prof. Kaibo Liu!'),
+      ('Jan 2025','Our paper <a class="nt" href="project-supply-chain.html#proj-bsac"><em>A Deep Reinforcement Learning Method Solving Bilevel Optimization for Product Design Considering Remanufacturing</em></a> is out in <em>IEEE Transactions on Engineering Management</em>.'),
+      ('Jul 2024','Our preprint <a class="nt" href="project-language-models.html#proj-causal"><em>Multi-Agent Causal Discovery Using Large Language Models</em></a> is now on arXiv.')]
 PROJECTS=[("setplm","SetPLM","https://github.com/xxia99/SetPLM","Keyphrase generation with a pretrained language model: T5 inside the One2Set paradigm, keyword-code control and keyword-based padding. State of the art on KP20K, Inspec, Krapivin, NUS, and SemEval.","Tsinghua University, 2023"),
           ("berthrl","BerthRL","https://github.com/xxia99/bqc_scheduling","Dynamic berth and quay-crane scheduling as a bilevel problem, solved by a PPO-based algorithm that outperforms genetic algorithms, particle swarm optimization, and FIFO rules.","Georgia Tech, 2022"),
           ("dcgan","Scenario generation for integrated energy systems","https://github.com/xxia99/DCGAN-for-Scenario-Generation","A Wasserstein DCGAN learns the joint behaviour of wind, photovoltaic, heating, and power subsystems; K-means picks typical scenarios for planning.","Tianjin University, 2020")]
 CV=[("2025 - present","University of Wisconsin-Madison","Ph.D. in Industrial Engineering. Advisor: Prof. Kaibo Liu."),
-    ("2022 - 2025","Tsinghua University, Industrial Statistics and Data Analytics Lab","Research assistant, advised by Prof. Chen Zhang. Multi-agent reinforcement learning for resilient supply chains; deep reinforcement learning for bilevel optimization; keyphrase generation with pretrained language models. Co-wrote chapters on machine learning, reinforcement learning, and Monte Carlo tree search for <em>Machine Learning: Industrial Big-Data Analysis</em> (Tsinghua University Press)."),
+    ("2022 - 2025","Tsinghua University, Superintelligence and Industrial Lab (SAIL)","Research assistant, advised by Prof. Chen Zhang. Multi-agent reinforcement learning for resilient supply chains; deep reinforcement learning for bilevel optimization; keyphrase generation with pretrained language models. Co-wrote chapters on machine learning, reinforcement learning, and Monte Carlo tree search for <em>Machine Learning: Industrial Big-Data Analysis</em> (Tsinghua University Press)."),
     ("2020 - 2022","Georgia Institute of Technology","M.Sc. in Electrical and Computer Engineering."),
     ("2021 - 2022","Ping An Technology, Shenzhen","AI researcher intern. Multimodal document understanding with pretrained language models; two invention patents."),
     ("2016 - 2020","Tianjin University","B.Eng. in Electrical Engineering and Automation.")]
 
-def page(active,title,body,desc="Xin Xia - Ph.D. student in Industrial Engineering at the University of Wisconsin-Madison. Multi-agent reinforcement learning, anomaly detection, and quality control."):
-    nav="".join(f'<li><a href="{h}"{" class=on" if h==active else ""}>{n}</a></li>' for h,n in NAV)
+
+import subprocess
+from PIL import Image as _Im
+
+# ---------------------------------------------------------------- demos
+def V(video,full,cap,fig):
+    """a looping clip; `full` is the still shown if the video cannot play"""
+    return dict(video="images/video/%s.mp4"%video,poster="images/video/%s_poster.jpg"%video,full=full,cap=cap,fig=fig)
+def I(image,w,h,cap,fig):
+    return dict(image="images/fulls/%s"%image,w=w,h=h,cap=cap,fig=fig)
+def L(text,url): return '<a href="%s" target="_blank" rel="noopener">%s</a>'%(url,text)
+def _size(m):
+    if "w" in m: return m["w"],m["h"]
+    o=subprocess.run(["ffprobe","-v","error","-select_streams","v:0","-show_entries","stream=width,height","-of","csv=p=0",os.path.join(ROOT,m["video"])],capture_output=True,text=True).stdout.strip().split(",")
+    m["w"],m["h"]=int(o[0]),int(o[1]); return m["w"],m["h"]
+
+# First entry = the demo shown on the main page; all entries appear on the projects page.
+DEMOS={
+ "dispatchppo":[V("robotarium_demo","images/fulls/dispatchppo_robotarium.jpg","Robotarium experiment: ten robots dispatched on the arena, with their trajectories and the detection statistic","Robot experiment (%s)"%L("Robotarium","https://www.robotarium.gatech.edu")),
+                V("dispatch_demo","images/fulls/dispatchppo_ue.jpg","Five UAVs patrolling a forest in the Unreal Engine simulator; blue frustums are the camera footprints","Wildfire simulation (%s)"%L("Unreal Engine","https://www.unrealengine.com"))],
+ "scan":[V("scan_demo","images/fulls/scan.jpg","SCAN: drone fleet in the wildfire simulator (overview, chase view, HUD)",
+           'Scene rebuilt from satellite records (%s)<sup><a href="https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncdc:C01501/html" target="_blank" rel="noopener" title="GOES-17 ABI L1b radiances (NOAA NCEI)">1</a>,<a href="https://goes.noaa.gov/documents/QuickGuide_Fire_Temperature_RGB.pdf" target="_blank" rel="noopener" title="Fire Temperature RGB recipe (NASA SPoRT)">2</a></sup>'%L("CIMSS Satellite","https://cimss.ssec.wisc.edu/satellite-blog/archives/40926")),
+         V("scan_traffic","images/fulls/scan_traffic.jpg","SCAN on the Los Angeles road network: drones detect a traffic incident","LA traffic incident (%s)"%L("XTraffic","https://github.com/XAITraffic/XTraffic"))],
+ "hass":[I("hass.svg",1466,526,"Hierarchical adaptive sampling: framework overview","Flat and hierarchical system structures"),
+         I("hass_iot.svg",826,201,"IoT testbed: Raspberry Pi edge devices, testbed structure, and in-control versus out-of-control data","IoT testbed case")],
+ "kappa":[I("kappa_model.svg",1737,569,"SetPLM: keyword extraction in the encoder and keyword-based keyphrase generation in the decoder","Encoder-decoder model"),
+          I("kappa.svg",835,335,"KAPPA: portrait generation and portrait-based analytics","Framework overview"),
+          I("kappa_result.svg",464,138,"Hyperparameter sensitivity on the expert-verified Patent-2k test set","Hyperparameter sensitivity")],
+ "bsac":[I("bsac_bdrl.svg",800,674,"Bilevel deep reinforcement learning: upper-level and lower-level agents in the BIMDP environment","Bilevel learning framework"),
+         I("bsac_result.svg",174,172,"Learning curves of the upper-level and lower-level agents on the laptop and electric-vehicle cases","Learning curves"),
+         I("bsac_sensitivity.svg",1800,648,"Sensitivity of the product-design and remanufacturing objectives (laptop and electric-vehicle cases)","Sensitivity analysis")],
+ "ijpe":[I("ijpe_policy.svg",330,132,"Policy network of the adapted SAC: reparameterization, action bounding and action discretization","Policy network"),
+         I("ijpe_value.svg",302,183,"Value network with element-wise value estimation","Value network"),
+         I("ijpe_problem.png",1224,741,"Hierarchical joint optimization of product design changes and the resilient supply chain","Joint design-change and supply-chain decisions"),
+         I("ijpe_structure.png",831,426,"Design change propagation in the product structure","Design change propagation"),
+         I("ijpe_result.png",1187,1084,"Objective values during training on the large-scale problem","Training curves")],
+ "msom":[I("msom.svg",296,158,"A bilevel supply chain system: platform as leader, supply chain members as followers","Bilevel supply chain system"),
+         I("msom_result.svg",468,138,"Gap of objective values between training and testing for each supply chain member","Robustness comparison")],
+ "causal":[I("causal_model.svg",440,146,"MAC framework: Meta-Debate Module and Debate-Coding Module","MAC framework"),
+           I("causal_result.svg",456,166,"Average rank across five datasets and three LLMs","Average rank across datasets")],
+}
+# A main-page demo may combine two figures of a work into one wider panel.
+MAIN={"bsac":dict(combo=[[DEMOS["bsac"][0],DEMOS["bsac"][1]]],fig="Bilevel learning framework and learning curves"),
+      "ijpe":dict(cols=[[DEMOS["ijpe"][0],DEMOS["ijpe"][1]],[DEMOS["ijpe"][4]]],fig="Policy and value networks, and training curves")}
+SHORT={"dispatchppo":"Collision-free dispatch for route-wise anomaly detection","scan":"SCAN: networked multi-agent anomaly detection","hass":"Hierarchical adaptive sampling (PAD)",
+       "kappa":"KAPPA: patent analysis with keyphrase portraits","bsac":"Bilevel SAC for product design and remanufacturing","ijpe":"Design changes with a resilient supply chain",
+       "msom":"Multi-level decision-making for supply chain resilience","causal":"Multi-agent causal discovery with LLMs"}
+
+THEMES=[
+ dict(slug="language-models",q="How to represent data",title="Multimodal data fusion and prediction",
+      desc="Pretrained language models for keyphrase generation and patent analysis, and LLM agents that debate to discover causal structure.",
+      cover="images/covers/language-models.png",fit="contain",keys=["kappa","causal"]),
+ dict(slug="multi-agent",q="What to observe",title="Real-time anomaly detection",
+      desc="Hierarchical and cooperative agents that allocate limited resources and coordinate decisions in large systems.",
+      cover="images/covers/multi-agent.png",fit="contain",keys=["hass","iise"]),
+ dict(slug="supply-chain",q="How to act",title="Resilience of networked systems",
+      desc="Deep reinforcement learning for bilevel problems in product design, remanufacturing and resilient supply chains.",
+      cover="images/covers/supply-chain.png",fit="contain",keys=["bsac","ijpe","msom"]),
+ dict(slug="fleets",q="How to coordinate",title="Coordinated control of robot and drone fleets",
+      desc="Dispatch and sampling policies that let fleets of mobile sensors detect anomalies quickly while keeping false alarms under control.",
+      cover="images/covers/fleets.png",fit="contain",keys=["dispatchppo","scan"]),
+]
+PAGE_OF={k:"project-%s.html"%t["slug"] for t in THEMES for k in t["keys"]}
+
+def media(m):
+    if "cols" in m:   # columns of stacked figures, widths chosen so every column has the same height
+        cols="".join('<div class="ccol" data-s="%.5f" data-n="%d" style="flex:%.4f 1 0">%s</div>'%(sum(x["h"]/x["w"] for x in col),len(col),1/sum(x["h"]/x["w"] for x in col),
+              "".join('<a href="%s" data-lb="%s"><img src="%s" alt="" loading="lazy" style="aspect-ratio:%d/%d"></a>'%(x["image"],x["cap"],x["image"],x["w"],x["h"]) for x in col)) for col in m["cols"])
+        return '<figure class="fig"><div class="media combo h">%s</div><figcaption>%s</figcaption></figure>'%(cols,m["fig"])
+    if "combo" in m:
+        parts="".join('<div class="crow">%s</div>'%"".join('<a href="%s" data-lb="%s" style="flex:%.4f 1 0"><img src="%s" alt="" loading="lazy" style="aspect-ratio:%d/%d"></a>'%(x["image"],x["cap"],x["w"]/x["h"],x["image"],x["w"],x["h"]) for x in row) for row in m["combo"])
+        return '<figure class="fig"><div class="media combo">%s</div><figcaption>%s</figcaption></figure>'%(parts,m["fig"])
+    w,h=_size(m); ar=' style="aspect-ratio:%d/%d"'%(w,h)
+    fig='<figcaption>%s</figcaption>'%m["fig"] if m.get("fig") else ""
+    if "video" in m:
+        a='<a class="media" href="%s" data-lb="%s" data-video="%s"><video src="%s" poster="%s" muted loop playsinline autoplay preload="metadata"%s></video></a>'%(m["full"],m["cap"],m["video"],m["video"],m["poster"],ar)
+    else:
+        a='<a class="media" href="%s" data-lb="%s"><img src="%s" alt="" loading="lazy"%s></a>'%(m["image"],m["cap"],m["image"],ar)
+    return '<figure class="fig" style="--ar:%.4f">%s%s</figure>'%(w/h,a,fig)
+
+def award_html(p):
+    if not p["award"]: return ""
+    tag=('a','href="%s" target="_blank" rel="noopener" '%p["award_url"]) if p.get("award_url") else ('div','')
+    return ('<%s %sclass="aw"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3"/></svg>%s</%s>'%(tag[0],tag[1],p["award"].replace('<b class="win">Winner</b>',"Winner, "),tag[0]))
+def buttons(p,project=True):
+    out="".join('<a href="%s" target="_blank" rel="noopener">%s</a>'%(u,l) for l,u in p["links"] if not u.startswith("images/"))
+    if project and p["k"] in PAGE_OF: out+='<a href="%s#proj-%s">Project</a>'%(PAGE_OF[p["k"]],p["k"])
+    return out
+def cite(p):
+    status=' <span class="st">(%s)</span>'%p["status"] if p["status"] else ""
+    return '<h3 class="t">%s</h3><div class="au">%s</div><div class="ve">%s%s</div>%s'%(p["title"],p["au"],p["venue"],status,award_html(p))
+
+def pub_html(p):
+    k=p["k"]
+    left=media(MAIN.get(k,DEMOS[k][0])) if k in DEMOS else '<figure class="fig"><span class="media"><img src="images/fulls/%s.jpg" alt="" loading="lazy"></span></figure>'%k
+    return '<article class="pub" id="pub-%s"><div class="left">%s</div><div class="right">%s<div class="btns">%s</div></div></article>'%(k,left,cite(p),buttons(p))
+
+def gallery(ms):
+    """rows of one or two demos: two share a row only if the pair stays reasonably tall"""
+    rows=[]; i=0
+    while i<len(ms):
+        a=ms[i]; wa,ha=_size(a)
+        if i+1<len(ms):
+            b=ms[i+1]; wb,hb=_size(b)
+            if wa/ha+wb/hb<=4.7: rows.append('<div class="pairrow">%s%s</div>'%(media(a),media(b))); i+=2; continue
+        rows.append('<div class="single">%s</div>'%media(a)); i+=1
+    return '<div class="gallery">%s</div>'%"".join(rows)
+def proj_html(p):
+    return ('<article class="proj" id="proj-%s">%s<p class="abs">%s</p><div class="btns">%s</div>%s</article>'
+            %(p["k"],cite(p),p["abs"],buttons(p,project=False),gallery(DEMOS[p["k"]]) if p["k"] in DEMOS else ""))
+
+# ---------------------------------------------------------------- page shell
+DESC="Xin Xia - Ph.D. candidate in Industrial Engineering at the University of Wisconsin-Madison. Reliable decisions in budgeted systems: multimodal foundation models, statistical process control, bilevel optimization, and multi-agent reinforcement learning."
+def shell(title,body,page):
+    pre="" if page=="index" else "index.html"
+    items=[("index.html","about"),("publications.html","publications"),("talks.html","talks"),("projects.html","projects"),("data/XinXia-CV.pdf","cv")]
+    nav="".join('<li><a href="%s"%s>%s</a></li>'%(h+('" target="_blank" rel="noopener' if h.endswith(".pdf") else ""),' class="on"' if (page==n or (page=="index" and n=="about")) else "","CV" if n=="cv" else n.capitalize()) for h,n in items)
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <title>{title}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="author" content="Xin Xia">
-<meta name="description" content="{desc}">
+<meta name="description" content="{DESC}">
 <meta property="og:title" content="{title}">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://xxia99.github.io/images/avatar.jpg">
+<meta property="og:image" content="https://xxia99.com/images/avatar.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
@@ -85,65 +206,122 @@ def page(active,title,body,desc="Xin Xia - Ph.D. student in Industrial Engineeri
 <main class="page">
 {body}
 </main>
-<footer class="foot">&copy; 2026 Xin Xia &middot; <a href="mailto:xxia65@wisc.edu">xxia65@wisc.edu</a> &middot; Department of Industrial and Systems Engineering, University of Wisconsin-Madison. Layout inspired by <a href="https://github.com/alshedivat/al-folio">al-folio</a>.</footer>
-<div class="lb" id="lb"><img src="" alt=""><div class="cap"></div></div>
+<footer class="foot">&copy; 2026 Xin Xia &middot; <a href="mailto:xxia65@wisc.edu">xxia65@wisc.edu</a> &middot; Department of Industrial and Systems Engineering, University of Wisconsin-Madison.</footer>
+<div class="lb" id="lb"><img src="" alt=""><video controls loop playsinline></video><div class="cap"></div></div>
 <script>
-(function(){{var lb=document.getElementById('lb'),im=lb.querySelector('img'),cp=lb.querySelector('.cap');
-document.querySelectorAll('a[data-lb]').forEach(function(a){{a.addEventListener('click',function(e){{e.preventDefault();im.src=a.getAttribute('href');cp.textContent=a.getAttribute('data-lb')||'';lb.classList.add('open');}});}});
-lb.addEventListener('click',function(){{lb.classList.remove('open');im.src='';}});
-document.addEventListener('keydown',function(e){{if(e.key==='Escape'){{lb.classList.remove('open');im.src='';}}}});
-document.querySelectorAll('.absb').forEach(function(a){{a.addEventListener('click',function(e){{e.preventDefault();a.closest('.pub').classList.toggle('open');}});}});}})();
+(function(){{var lb=document.getElementById('lb'),im=lb.querySelector('img'),vd=lb.querySelector('video'),cp=lb.querySelector('.cap');
+function close(){{lb.classList.remove('open');im.src='';vd.pause();vd.removeAttribute('src');vd.load();lb.classList.remove('isvideo');}}
+document.querySelectorAll('a[data-lb]').forEach(function(a){{a.addEventListener('click',function(e){{e.preventDefault();var v=a.getAttribute('data-video');
+if(v){{lb.classList.add('isvideo');vd.src=v;vd.currentTime=0;vd.play().catch(function(){{}});}}else{{lb.classList.remove('isvideo');var h=a.getAttribute('href');im.style.width='';im.style.background='';im.onload=function(){{if(/\\.svg$/.test(h)&&im.naturalHeight){{var ar=im.naturalWidth/im.naturalHeight;im.style.width=Math.min(window.innerWidth*0.92,window.innerHeight*0.86*ar)+'px';im.style.background='#fff';}}}};im.src=h;}}
+cp.textContent=a.getAttribute('data-lb')||'';lb.classList.add('open');}});}});
+lb.addEventListener('click',function(e){{if(e.target!==vd)close();}});
+document.addEventListener('keydown',function(e){{if(e.key==='Escape')close();}});
+var links=[].filter.call(document.querySelectorAll('.nav li a'),function(a){{return a.getAttribute('href').charAt(0)==='#';}}),secs=links.map(function(a){{return document.querySelector(a.getAttribute('href'));}});
+function spy(){{if(!links.length)return;var y=window.scrollY+120,i=0;secs.forEach(function(s,j){{if(s&&s.offsetTop<=y)i=j;}});links.forEach(function(a,j){{a.classList.toggle('on',j===i);}});}}
+window.addEventListener('scroll',spy,{{passive:true}});spy();
+function fit(){{document.querySelectorAll('.media.combo.h').forEach(function(C){{var cols=[].slice.call(C.querySelectorAll('.ccol'));if(cols.length!==2)return;var g=14,r=10,W=C.clientWidth-16-g,s1=+cols[0].dataset.s,s2=+cols[1].dataset.s,e1=r*(cols[0].dataset.n-1),e2=r*(cols[1].dataset.n-1),w1=(W*s2+e2-e1)/(s1+s2);cols[0].style.flex='0 0 '+w1+'px';cols[1].style.flex='0 0 '+(W-w1)+'px';}});
+document.querySelectorAll('.pairrow').forEach(function(L){{var figs=[].slice.call(L.querySelectorAll('.fig')),ars=figs.map(function(f){{return parseFloat(f.style.getPropertyValue('--ar'))||1.6;}}),sum=ars.reduce(function(a,b){{return a+b;}},0);
+figs.forEach(function(f){{f.style.flex='';}});
+if(window.innerWidth<=700){{L.classList.add('col');return;}}
+L.classList.remove('col');var inner=L.clientWidth-14*(figs.length-1);figs.forEach(function(f,i){{f.style.flex='0 0 '+(inner*ars[i]/sum)+'px';}});}});}}
+fit();window.addEventListener('resize',fit);window.addEventListener('load',fit);
+if('IntersectionObserver' in window){{var io=new IntersectionObserver(function(es){{es.forEach(function(e){{var v=e.target;if(e.isIntersecting){{v.play().catch(function(){{}});}}else{{v.pause();}}}});}},{{threshold:.2}});document.querySelectorAll('main video').forEach(function(v){{io.observe(v);}});}}
+}})();
 </script>
 </body>
 </html>
 """
 
-def pub_html(p,full=True):
-    links=""
-    for l,u in p["links"]:
-        lb=' data-lb="%s"'%p["cap"] if u.startswith("images/") else ""
-        links+='<a href="%s"%s>%s</a>'%(u,lb,l)
-    absbtn='<a href="#" class="absb">Abs</a>' if full else ""
-    award='<div class="aw">%s</div>'%p["award"] if p["award"] else ""
+# ---------------------------------------------------------------- main page
+FOCUS=[("What to sense","Resource-limited anomaly detection: a small monitoring budget is allocated across many data streams so that changes are found quickly.","project-multi-agent.html"),
+       ("How to coordinate","Coordinated fleet control: robots and drones decide where to go next, without collisions and with false alarms under control.","project-fleets.html"),
+       ("How to represent","Document representation and analytics: foundation models turn long, multi-level documents into compact portraits.","project-language-models.html")]
+AW1='https://connect.informs.org/discussion/informs-2026-best-referred-paper-competition-finalists#:~:text=SCAN%3A%20Networked%20Multi-Agent%20Reinforcement%20Learning'
+AW2='https://myemail.constantcontact.com/QCRE-News---May-2025.html?aid=vKcqr1w06AU&amp;soid=1101700049774#:~:text=Interactive%20Resource%20Planning%20and%20Change%20Detection'
+FOUR=(' My work covers four directions: <a href="project-fleets.html">robot and drone fleets for anomaly detection</a>, <a href="project-multi-agent.html">multi-agent systems for decision making</a>, <a href="project-language-models.html">foundation models and large language models</a>, and <a href="project-supply-chain.html">AI-driven supply chain management</a>.') if os.environ.get("PLAN","c")=="c" else ""
+hero=f"""<section id="about"><header class="hero"><div><h1><b>Xin</b> Xia</h1>
+<p>I am a Ph.D. candidate in <a href="https://engineering.wisc.edu/departments/industrial-systems-engineering/">Industrial and Systems Engineering</a> at the University of Wisconsin-Madison, advised by <a href="https://kaibo.ie.wisc.edu/index.html">Prof. Kaibo Liu</a>. I received my M.Sc. in Electrical and Computer Engineering from Georgia Tech and my B.Eng. in Electrical Engineering and Automation from Tianjin University.</p>
+<p>My research addresses how to make reliable decisions in budgeted systems, where sensing and action resources are limited. This involves four questions: how to represent heterogeneous data, what to observe, how to act, and how to coordinate multiple decision makers. To this end, I work on multimodal foundation models, statistical process control, bilevel optimization, multi-agent reinforcement learning, and multi-robot path planning. Applications include <a href="project-language-models.html">multimodal data fusion and prediction</a>, <a href="project-multi-agent.html">real-time anomaly detection</a>, <a href="project-supply-chain.html">resilience of networked systems</a>, and <a href="project-fleets.html">coordinated control of robot and drone fleets</a>.</p>
+<p>My work has appeared in NeurIPS, <em>Technometrics</em>, <em>IEEE Transactions on Engineering Management</em>, and the <em>International Journal of Production Economics</em>. It received the <a class="hot" href="{AW1}" target="_blank" rel="noopener">INFORMS QSR Best Refereed Paper Award</a> (2026) and was a finalist in the <a class="hot" href="{AW2}" target="_blank" rel="noopener">IISE QCRE Best Track Paper Competition</a> (2025). I serve as a reviewer for NeurIPS, <em>IEEE Transactions on Automation Science and Engineering</em>, <em>PNAS</em>, and <em>PNAS Nexus</em>.</p>
+<p class="links"><a href="mailto:xxia65@wisc.edu">Email</a><a href="data/XinXia-CV.pdf">CV</a><a href="https://scholar.google.com/citations?user=baRH_vIAAAAJ&amp;hl=en">Google Scholar</a><a href="https://github.com/xxia99">GitHub</a><a href="https://www.linkedin.com/in/xin-xia-678546204/" target="_blank" rel="noopener">LinkedIn</a><a href="https://orcid.org/0009-0006-2910-7778" target="_blank" rel="noopener">ORCID</a></p>
+</div><div class="pic"><img src="images/avatar.jpg" alt="Xin Xia"><div class="addr">Department of Industrial and<br>Systems Engineering<br>University of Wisconsin-Madison<br>xxia65@wisc.edu</div></div></header></section>"""
+VEN={"fleets":"NeurIPS &middot; INFORMS","multi-agent":"Technometrics &middot; IISE Trans.","language-models":"IJDS &middot; arXiv","supply-chain":"IEEE TEM &middot; IJPE &middot; M&amp;SOM"}
+PLAN=os.environ.get("PLAN","c")   # a: directions with papers (text)   b: bar and four boxes   c: nothing
+NICK={"dispatchppo":"DispatchPPO (NeurIPS 2026)","scan":"SCAN (INFORMS 2026)","hass":"Hierarchical adaptive sampling (Technometrics)","iise":"Multi-stage manufacturing coordination (IISE Trans., under review)",
+      "kappa":"KAPPA (IJDS, major revision)","causal":"Multi-agent causal discovery (arXiv 2024)","bsac":"BSAC (IEEE TEM 2025)","ijpe":"Design changes with resilient supply chains (IJPE 2025)","msom":"Multi-level supply chain decisions (M&amp;SOM, submitted)"}
+if PLAN=="a":
+    roadmap='<section id="directions"><ul class="dirs">'+"".join('<li><a class="dn" href="project-%s.html">%s</a><span>%s</span></li>'%(t["slug"],t["title"],", ".join('<a href="project-%s.html#proj-%s">%s</a>'%(t["slug"],k,NICK[k]) for k in t["keys"])) for t in THEMES)+'</ul></section>'
+elif PLAN=="b":
+    roadmap=('<section id="directions" class="dia"><div class="dtop"><b>Reliable decisions in budgeted systems</b><span>where sensing and action resources are limited</span></div><div class="dcols">'
+      +"".join('<a class="dcol" href="project-%s.html"><div class="dbox">%s</div></a>'%(t["slug"],t["title"]) for t in THEMES)+'</div></section>')
+else:
+    roadmap=""
+news='<section id="news"><h2>News</h2><div class="news">'+"".join(f'<div class="d">{d}</div><div>{t}</div>' for d,t in NEWS)+'</div></section>'
+SELECTED=["dispatchppo","scan","hass","kappa","bsac","causal"]
+research='<section id="research"><h2>Selected research <a class="more" href="publications.html">All publications &rarr;</a></h2>'
+for g in ["2026","2025","2024","Under review"]:
+    items=[p for p in PUBS if p["year"]==g and p["k"] in SELECTED]
+    if items: research+=f'<div class="year">{g}</div><div class="pubs">{"".join(pub_html(p) for p in items)}</div>'
+research+='</section>'
+TIMELINE=[("2025 - present","Ph.D. candidate, University of Wisconsin-Madison","Industrial and Systems Engineering. Advisor: Prof. Kaibo Liu.","uw.svg","University of Wisconsin-Madison",""),
+          ("2022 - 2025","Research assistant, Tsinghua University",'<a href="https://thu-sail-lab.github.io/home/" target="_blank" rel="noopener">SAIL Lab</a>. Advisor: <a href="https://www.ie.tsinghua.edu.cn/eng/info/1051/1031.htm" target="_blank" rel="noopener">Prof. Chen Zhang</a>.',"tsinghua.svg","Tsinghua University",""),
+          ("2021 - 2022","AI researcher intern, Ping An Technology","Multimodal document understanding; two invention patents.","pingan.svg","Ping An"," wide"),
+          ("2020 - 2022","M.Sc., Georgia Institute of Technology","Electrical and Computer Engineering.","gatech.svg","Georgia Institute of Technology",""),
+          ("2016 - 2020","B.Eng., Tianjin University","Electrical Engineering and Automation.","tju.png","Tianjin University","")]
+cv='<section id="experience"><h2>Experience</h2><div class="vt">'+"".join(
+   '<div class="vi"><img class="vl%s" src="images/logos/%s" alt="%s" loading="lazy"><div class="vd">%s</div><div class="vh">%s</div><div class="vs">%s</div></div>'%(w,lg,alt,d,h,sub) for d,h,sub,lg,alt,w in TIMELINE)+'</div></section>'
+open(os.path.join(ROOT,os.environ.get("OUT","index.html")),"w").write(shell("Xin Xia","\n".join([hero,roadmap,news,research,cv]),"index"))
+
+# ---------------------------------------------------------------- projects: gallery + one page per theme
+BYK0={p["k"]:p for p in PUBS}
+MINI={"setplm":"Keyphrase generation with a pretrained language model.","berthrl":"Berth and quay-crane scheduling with reinforcement learning.","dcgan":"Scenario generation with a Wasserstein DCGAN."}
+def card(t):
+    venues=" &middot; ".join(dict.fromkeys(BYK0[k]["badge"] for k in t["keys"]))
+    return ('<a class="pcard" href="project-%s.html"><div class="cover %s"><img src="%s" alt="" loading="lazy"></div><div class="b"><h3>%s</h3></div></a>'
+            %(t["slug"],t["fit"],t["cover"],t["title"]))
+proj='<section id="projects"><h1>Projects</h1>'
+proj+=('<h2>Research</h2><div class="dia"><div class="dtop"><b>Reliable decisions in budgeted systems</b><span>where sensing and action resources are limited</span></div><div class="dcols">'
+  +"".join('<a class="dcol" href="project-%s.html"><div class="dq">%s</div><div class="dbox">%s</div><div class="dimg %s"><img src="%s" alt="" loading="lazy"></div></a>'%(t["slug"],t["q"],t["title"],t["fit"],t["cover"]) for t in THEMES)+'</div></div>')
+proj+='<h2>Open-source mini-projects</h2><div class="pgrid three">'+"".join('<a class="pcard text" href="%s" target="_blank" rel="noopener"><div class="b"><h3>%s</h3><p>%s</p></div></a>'%(u,n,MINI[k]) for k,n,u,d,w in PROJECTS)+'</div></section>'
+open(os.path.join(ROOT,"projects.html"),"w").write(shell("Projects - Xin Xia",proj,"projects"))
+for t in THEMES:
+    body='<section><p class="back"><a href="projects.html">&larr; All projects</a></p><h1 class="ph">%s</h1>'%t["title"]
+    body+="".join(proj_html(BYK0[k]) for k in t["keys"])+'</section>'
+    open(os.path.join(ROOT,"project-%s.html"%t["slug"]),"w").write(shell("%s - Xin Xia"%t["title"],body,"projects"))
+
+# ---------------------------------------------------------------- publications page (text only)
+GROUPS=[("Journal articles","J",["hass","bsac","ijpe"]),
+        ("Conference papers","C",["dispatchppo","scan"]),
+        ("Under review and preprints","U",["kappa","msom","iise","causal"])]
+BYK={p["k"]:p for p in PUBS}
+def entry(tag,p):
     status=' <span class="st">(%s)</span>'%p["status"] if p["status"] else ""
-    lab='<span>%s</span>'%p["lab"] if p["lab"] else ""
-    thumb='<a href="images/fulls/%s.jpg" data-lb="%s" class="th"><img src="images/thumbs/%s.jpg" alt="">%s</a>'%(p["k"],p["cap"],p["k"],lab)
-    absdiv='<div class="abs">%s</div>'%p["abs"] if full else ""
-    return ('<article class="pub"><div class="left"><div class="badge">%s</div>%s</div>'
-            '<div class="right"><h3 class="t">%s</h3><div class="au">%s</div><div class="ve">%s%s</div>'
-            '<div class="btns">%s%s</div>%s%s</div></article>')%(p["badge"],thumb,p["title"],p["au"],p["venue"],status,absbtn,links,award,absdiv)
+    links=[(l,u) for l,u in p["links"] if not u.startswith("images/")]
+    if p["k"] in PAGE_OF: links.append(("Project","%s#proj-%s"%(PAGE_OF[p["k"]],p["k"])))
+    ln=" ".join('<a href="%s"%s>%s</a>'%(u,"" if u.startswith("project-") else ' target="_blank" rel="noopener"',l) for l,u in links)
+    aw=""
+    if p["award"]:
+        txt=p["award"].replace('<b class="win">Winner</b>',"Winner, ")
+        aw=' <span class="awi">%s</span>'%(('<a href="%s" target="_blank" rel="noopener">%s</a>'%(p["award_url"],txt)) if p.get("award_url") else txt)
+    return '<li id="%s"><span class="tag">[%s]</span><div>%s. <span class="pt">%s.</span> <em>%s</em>%s.%s<div class="pl">%s</div></div></li>'%(p["k"],tag,p["au"].replace(", and "," and ") if p["au"].count(",")<2 else p["au"],p["title"],p["venue"],status,aw,ln)
+pubs='<section id="publications"><h1>Publications</h1>'
+for title,letter,keys in GROUPS:
+    n=len(keys)
+    pubs+='<h2>%s</h2><ol class="plist">%s</ol>'%(title,"".join(entry("%s%d"%(letter,n-i),BYK[k]) for i,k in enumerate(keys)))
+pubs+='<h2>Patents</h2><ol class="plist">'+"".join('<li><span class="tag">[P%d]</span><div>%s <span class="pt">%s</span> Chinese invention patent, <span class="mono">%s</span>.</div></li>'%(len(PATENTS)-i,a,t,n) for i,(n,a,t) in enumerate(PATENTS))+'</ol></section>'
+open(os.path.join(ROOT,"publications.html"),"w").write(shell("Publications - Xin Xia",pubs,"publications"))
 
-# ---- about ----
-sel=[p for p in PUBS if p.get("sel")]
-about=f"""<header class="hero"><div><h1><b>Xin</b> Xia</h1>
-<p class="desc">Ph.D. student, Industrial and Systems Engineering, <a href="https://engineering.wisc.edu/departments/industrial-systems-engineering/">University of Wisconsin-Madison</a>. Advisor: <a href="https://kaibo.ie.wisc.edu/index.html">Prof. Kaibo Liu</a>.</p>
-<p>{BIO1}</p><p>{BIO2}</p>
-<p class="small">Interests: {INTERESTS}.</p>
-<p class="links"><a href="mailto:xxia65@wisc.edu">Email</a><a href="data/XinXia-CV.pdf">CV</a><a href="https://scholar.google.com/citations?user=baRH_vIAAAAJ&amp;hl=en">Google Scholar</a><a href="https://github.com/xxia99">GitHub</a></p>
-</div><div class="pic"><img src="images/avatar.jpg" alt="Xin Xia"><div class="addr">Department of Industrial and<br>Systems Engineering<br>University of Wisconsin-Madison<br>xxia65@wisc.edu</div></div></header>
-<h2>news <a class="more" href="news.html">all news &rarr;</a></h2>
-<div class="news">{"".join(f'<div class="d">{d}</div><div>{t}</div>' for d,t in NEWS[:3])}</div>
-<h2>selected publications <a class="more" href="publications.html">all publications &rarr;</a></h2>
-<div class="pubs">{"".join(pub_html(p,full=False) for p in sel)}</div>
-"""
-# ---- publications ----
-groups=["2026","2025","Under review","Preprints"]
-pubs='<h1>publications</h1><p class="desc">Publications in reverse chronological order. Click a thumbnail or the Poster/Demo/Figure buttons to enlarge; Abs shows the summary.</p>'
-for g in groups:
-    items=[p for p in PUBS if p["year"]==g]
-    pubs+=f'<div class="year">{g}</div><div class="pubs">{"".join(pub_html(p) for p in items)}</div>'
-pubs+='<div class="year">Patents</div><ul class="plain">'+"".join(f'<li><span class="mono">{n}</span> {a} {t} Chinese invention patent.</li>' for n,a,t in PATENTS)+'</ul>'
-# ---- projects ----
-projects='<h1>projects</h1><p class="desc">Open-source code and earlier research projects.</p><div class="cards">'+"".join(
- f'<a class="card" href="{u}"><img src="images/thumbs/{k}.jpg" alt=""><div class="b"><h4>{n}</h4><p>{d}</p><div class="w">{w}</div></div></a>' for k,n,u,d,w in PROJECTS)+'</div>'
-# ---- news ----
-news='<h1>news</h1><div class="news full">'+"".join(f'<div class="d">{d}</div><div>{t}</div>' for d,t in NEWS)+'</div>'
-# ---- cv ----
-cv='<h1>cv</h1><p class="desc"><a class="btn" href="data/XinXia-CV.pdf">Download the full CV (PDF)</a></p><h2>experience and education</h2><div class="tl">'+"".join(
- f'<div class="when">{w}</div><div><b>{o}</b><br><span class="sub">{d}</span></div>' for w,o,d in CV)+'</div>'
-cv+='<h2>awards</h2><ul class="plain"><li>INFORMS QSR Best Refereed Paper Award, 2026 INFORMS Annual Meeting.</li><li>Finalist, IISE QCRE Best Track Paper Competition, 2025 IISE Annual Meeting.</li></ul>'
-cv+='<h2>skills</h2><ul class="plain"><li><b>Programming:</b> Python, C++, MATLAB, C, R; PyTorch, TensorFlow, Keras.</li><li><b>Methods:</b> deep and multi-agent reinforcement learning, bilevel optimization, statistical process control, natural language processing with pretrained language models.</li><li><b>Languages:</b> Chinese (native), English.</li></ul>'
+# ---------------------------------------------------------------- talks page
+TALKS=[("dispatchppo",None,"INFORMS Annual Meeting, San Francisco, CA, Nov 2026","","data/certificates/INFORMS2026_presentation_certificate.pdf"),
+       ("scan",None,"INFORMS QSR Best Refereed Paper Competition, INFORMS Annual Meeting, San Francisco, CA, Nov 2026",'<a href="%s" target="_blank" rel="noopener">Winner</a>'%AW1,""),
+       (None,"Interactive Resource Allocation and Anomaly Detection via Multi-Agent Reinforcement Learning","INFORMS Annual Meeting, Atlanta, GA, Oct 2025","","data/certificates/INFORMS2025_presentation_certificate.pdf"),
+       (None,"Interactive Resource Planning and Change Detection via Multi-agent Reinforcement Learning","IISE QCRE Best Track Paper Competition, IISE Annual Conference &amp; Expo, Atlanta, GA, Jun 2025",'<a href="%s" target="_blank" rel="noopener">Finalist</a>'%AW2,"")]
+talks='<section id="talks"><h1>Invited talks</h1><ol class="plist">'+"".join(
+    '<li><span class="tag">[T%d]</span><div><span class="pt">%s.</span> <em>%s</em>.%s%s</div></li>'%(len(TALKS)-i,BYK[k]["title"] if k else t,ev,(' <span class="awi">%s</span>'%aw) if aw else "",('<div class="pl"><a href="%s" target="_blank" rel="noopener">Certificate</a></div>'%c) if c else "")
+    for i,(k,t,ev,aw,c) in enumerate(TALKS))+'</ol></section>'
+open(os.path.join(ROOT,"talks.html"),"w").write(shell("Invited talks - Xin Xia",talks,"talks"))
 
-for fn,ttl,body,act in [("index.html","Xin Xia",about,"index.html"),("publications.html","Publications - Xin Xia",pubs,"publications.html"),("projects.html","Projects - Xin Xia",projects,"projects.html"),("news.html","News - Xin Xia",news,"news.html"),("cv.html","CV - Xin Xia",cv,"cv.html")]:
-    open(os.path.join(ROOT,fn),"w").write(page(act,ttl,body))
-print("built",len(PUBS),"publications")
+# old multi-page URLs redirect to the matching section
+for fn,sec in [("news.html","news"),("cv.html","experience")]:
+    open(os.path.join(ROOT,fn),"w").write(f'<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Xin Xia</title><meta http-equiv="refresh" content="0; url=index.html#{sec}"><link rel="canonical" href="https://xxia99.com/#{sec}"></head><body><a href="index.html#{sec}">Continue to xxia99.com</a></body></html>\n')
+print("built index.html, publications.html and projects.html with",len(PUBS),"publications")

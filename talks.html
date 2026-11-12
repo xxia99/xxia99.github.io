@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Invited talks - Xin Xia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="author" content="Xin Xia">
+<meta name="description" content="Xin Xia - Ph.D. candidate in Industrial Engineering at the University of Wisconsin-Madison. Reliable decisions in budgeted systems: multimodal foundation models, statistical process control, bilevel optimization, and multi-agent reinforcement learning.">
+<meta property="og:title" content="Invited talks - Xin Xia">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://xxia99.com/images/avatar.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<nav class="nav"><div class="in"><a class="brand" href="index.html"><b>Xin</b> Xia</a><ul><li><a href="index.html">About</a></li><li><a href="publications.html">Publications</a></li><li><a href="talks.html" class="on">Talks</a></li><li><a href="projects.html">Projects</a></li><li><a href="data/XinXia-CV.pdf" target="_blank" rel="noopener">CV</a></li></ul></div></nav>
+<main class="page">
+<section id="talks"><h1>Invited talks</h1><ol class="plist"><li><span class="tag">[T4]</span><div><span class="pt">Learning Collision-Free Dispatch Policies for Route-Wise Decision-Dependent Anomaly Detection.</span> <em>INFORMS Annual Meeting, San Francisco, CA, Nov 2026</em>.<div class="pl"><a href="data/certificates/INFORMS2026_presentation_certificate.pdf" target="_blank" rel="noopener">Certificate</a></div></div></li><li><span class="tag">[T3]</span><div><span class="pt">SCAN: Networked Multi-Agent Reinforcement Learning for Decentralized Anomaly Detection in Graph-Structured Systems.</span> <em>INFORMS QSR Best Refereed Paper Competition, INFORMS Annual Meeting, San Francisco, CA, Nov 2026</em>. <span class="awi"><a href="https://connect.informs.org/discussion/informs-2026-best-referred-paper-competition-finalists#:~:text=SCAN%3A%20Networked%20Multi-Agent%20Reinforcement%20Learning" target="_blank" rel="noopener">Winner</a></span></div></li><li><span class="tag">[T2]</span><div><span class="pt">Interactive Resource Allocation and Anomaly Detection via Multi-Agent Reinforcement Learning.</span> <em>INFORMS Annual Meeting, Atlanta, GA, Oct 2025</em>.<div class="pl"><a href="data/certificates/INFORMS2025_presentation_certificate.pdf" target="_blank" rel="noopener">Certificate</a></div></div></li><li><span class="tag">[T1]</span><div><span class="pt">Interactive Resource Planning and Change Detection via Multi-agent Reinforcement Learning.</span> <em>IISE QCRE Best Track Paper Competition, IISE Annual Conference &amp; Expo, Atlanta, GA, Jun 2025</em>. <span class="awi"><a href="https://myemail.constantcontact.com/QCRE-News---May-2025.html?aid=vKcqr1w06AU&amp;soid=1101700049774#:~:text=Interactive%20Resource%20Planning%20and%20Change%20Detection" target="_blank" rel="noopener">Finalist</a></span></div></li></ol></section>
+</main>
+<footer class="foot">&copy; 2026 Xin Xia &middot; <a href="mailto:xxia65@wisc.edu">xxia65@wisc.edu</a> &middot; Department of Industrial and Systems Engineering, University of Wisconsin-Madison.</footer>
+<div class="lb" id="lb"><img src="" alt=""><video controls loop playsinline></video><div class="cap"></div></div>
+<script>
+(function(){var lb=document.getElementById('lb'),im=lb.querySelector('img'),vd=lb.querySelector('video'),cp=lb.querySelector('.cap');
+function close(){lb.classList.remove('open');im.src='';vd.pause();vd.removeAttribute('src');vd.load();lb.classList.remove('isvideo');}
+document.querySelectorAll('a[data-lb]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var v=a.getAttribute('data-video');
+if(v){lb.classList.add('isvideo');vd.src=v;vd.currentTime=0;vd.play().catch(function(){});}else{lb.classList.remove('isvideo');var h=a.getAttribute('href');im.style.width='';im.style.background='';im.onload=function(){if(/\.svg$/.test(h)&&im.naturalHeight){var ar=im.naturalWidth/im.naturalHeight;im.style.width=Math.min(window.innerWidth*0.92,window.innerHeight*0.86*ar)+'px';im.style.background='#fff';}};im.src=h;}
+cp.textContent=a.getAttribute('data-lb')||'';lb.classList.add('open');});});
+lb.addEventListener('click',function(e){if(e.target!==vd)close();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+var links=[].filter.call(document.querySelectorAll('.nav li a'),function(a){return a.getAttribute('href').charAt(0)==='#';}),secs=links.map(function(a){return document.querySelector(a.getAttribute('href'));});
+function spy(){if(!links.length)return;var y=window.scrollY+120,i=0;secs.forEach(function(s,j){if(s&&s.offsetTop<=y)i=j;});links.forEach(function(a,j){a.classList.toggle('on',j===i);});}
+window.addEventListener('scroll',spy,{passive:true});spy();
+function fit(){document.querySelectorAll('.media.combo.h').forEach(function(C){var cols=[].slice.call(C.querySelectorAll('.ccol'));if(cols.length!==2)return;var g=14,r=10,W=C.clientWidth-16-g,s1=+cols[0].dataset.s,s2=+cols[1].dataset.s,e1=r*(cols[0].dataset.n-1),e2=r*(cols[1].dataset.n-1),w1=(W*s2+e2-e1)/(s1+s2);cols[0].style.flex='0 0 '+w1+'px';cols[1].style.flex='0 0 '+(W-w1)+'px';});
+document.querySelectorAll('.pairrow').forEach(function(L){var figs=[].slice.call(L.querySelectorAll('.fig')),ars=figs.map(function(f){return parseFloat(f.style.getPropertyValue('--ar'))||1.6;}),sum=ars.reduce(function(a,b){return a+b;},0);
+figs.forEach(function(f){f.style.flex='';});
+if(window.innerWidth<=700){L.classList.add('col');return;}
+L.classList.remove('col');var inner=L.clientWidth-14*(figs.length-1);figs.forEach(function(f,i){f.style.flex='0 0 '+(inner*ars[i]/sum)+'px';});});}
+fit();window.addEventListener('resize',fit);window.addEventListener('load',fit);
+if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){var v=e.target;if(e.isIntersecting){v.play().catch(function(){});}else{v.pause();}});},{threshold:.2});document.querySelectorAll('main video').forEach(function(v){io.observe(v);});}
+})();
+</script>
+</body>
+</html>
