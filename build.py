@@ -179,6 +179,8 @@ def proj_html(p):
 
 # ---------------------------------------------------------------- page shell
 DESC="Xin Xia - Ph.D. candidate in Industrial Engineering at the University of Wisconsin-Madison. Reliable decisions in budgeted systems: multimodal foundation models, statistical process control, bilevel optimization, and multi-agent reinforcement learning."
+import hashlib
+CSSV=hashlib.md5(open(os.path.join(ROOT,"assets","site.css"),"rb").read()).hexdigest()[:8]
 def shell(title,body,page):
     pre="" if page=="index" else "index.html"
     items=[("index.html","about"),("publications.html","publications"),("talks.html","talks"),("projects.html","projects"),("data/XinXia-CV.pdf","cv")]
@@ -199,7 +201,7 @@ def shell(title,body,page):
 <meta property="og:image" content="https://xxia99.com/images/avatar.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/site.css?v={CSSV}">
 </head>
 <body>
 <nav class="nav"><div class="in"><a class="brand" href="index.html"><b>Xin</b> Xia</a><ul>{nav}</ul></div></nav>
