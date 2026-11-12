@@ -45,8 +45,8 @@ PUBS=[
       abs="Several LLM agents with different roles debate and vote on causal edges, combining metadata with observational data.",
       links=[("arXiv","https://arxiv.org/abs/2407.15073")],year="2024",cap="arXiv:2407.15073, first page",lab="Preprint",fig="Preprint, arXiv:2407.15073"),
 ]
-PATENTS=[("CN115205869A","P. Liu, <b>X. Xia</b>, Z. Yan, Y. Liu, J. Xiao.",'<a href="https://patents.google.com/patent/CN115205869A/en">Generation, implementation, electronic devices, and storage media for structured document information</a>'),
-         ("CN114661545A","P. Liu, L. Huang, X. Yu, <b>X. Xia</b>, Y. Liu, J. Xiao.",'<a href="https://patents.google.com/patent/CN114661545A/en">Method, implementation, devices, and storage media for monitoring of processor resources</a>')]
+PATENTS=[("CN115205869A","P. Liu, <b>X. Xia</b>, Z. Yan, Y. Liu, J. Xiao.",'<a href="https://patents.google.com/patent/CN115205869A/en">Method and device for generating structured document information, electronic equipment and storage medium</a>'),
+         ("CN114661545A","P. Liu, L. Huang, X. Yu, <b>X. Xia</b>, Y. Liu, J. Xiao.",'<a href="https://patents.google.com/patent/CN114661545A/en">Method, device and equipment for monitoring processor resources and storage medium</a>')]
 NEWS=[('Nov 2026','Honored that <a class="nt" href="project-fleets.html#proj-scan"><em>SCAN: Networked Multi-Agent Reinforcement Learning for Decentralized Anomaly Detection in Graph-Structured Systems</em></a> won the <a class="hot" href="https://connect.informs.org/discussion/informs-2026-best-referred-paper-competition-finalists#:~:text=SCAN%3A%20Networked%20Multi-Agent%20Reinforcement%20Learning" target="_blank" rel="noopener">INFORMS QSR Best Refereed Paper Award</a> at the 2026 INFORMS Annual Meeting in San Francisco!'),
       ('Nov 2026','Enjoyed giving an <a href="talks.html">invited talk</a> on <a class="nt" href="project-fleets.html#proj-dispatchppo"><em>Learning Collision-Free Dispatch Policies for Route-Wise Decision-Dependent Anomaly Detection</em></a> at the 2026 INFORMS Annual Meeting in San Francisco.'),
       ('Nov 2026','Happy to share that <a class="nt" href="project-multi-agent.html#proj-hass"><em>Multi-Agent Reinforcement Learning for Anomaly Detection with Hierarchical Adaptive Sampling Strategy</em></a> has been accepted by <em>Technometrics</em>.'),
@@ -284,7 +284,15 @@ def card(t):
 proj='<section id="projects"><h1>Projects</h1>'
 proj+=('<h2>Research</h2><div class="dia"><div class="dtop"><b>Reliable decisions in budgeted systems</b><span>where sensing and action resources are limited</span></div><div class="dcols">'
   +"".join('<a class="dcol" href="project-%s.html"><div class="dq">%s</div><div class="dbox">%s</div><div class="dimg %s"><img src="%s" alt="" loading="lazy"></div></a>'%(t["slug"],t["q"],t["title"],t["fit"],t["cover"]) for t in THEMES)+'</div></div>')
-proj+='<h2>Open-source mini-projects</h2><div class="pgrid three">'+"".join('<a class="pcard text" href="%s" target="_blank" rel="noopener"><div class="b"><h3>%s</h3><p>%s</p></div></a>'%(u,n,MINI[k]) for k,n,u,d,w in PROJECTS)+'</div></section>'
+MINIS=[("BerthRL","Berth and quay-crane scheduling with reinforcement learning.","https://github.com/xxia99/bqc_scheduling"),
+       ("Scenario generation for integrated energy systems","Scenario generation with a Wasserstein DCGAN.","https://github.com/xxia99/DCGAN-for-Scenario-Generation"),
+       ("2048 with deep Q-learning","A DQN agent that plays 2048, with a web demo.",""),
+       ("Patient outcome prediction from text","Tabular patient records converted to text for classification.","https://github.com/xxia99/Text-Classification"),
+       ("Weather forecasting with a foundation model","Time-MoE compared with SARIMA and Seq2Seq baselines.","")]
+COURSE=[("C++ projects","Nine problems, from Langton's ant to a 3D UAV show simulation.","https://github.com/xxia99/Cpp-Projects"),
+        ("Signal processing with MATLAB","Eight problems and four projects in digital signal processing.","https://github.com/xxia99/DSP-with-MATLAB")]
+def _cards(L): return '<div class="pgrid three">'+"".join((('<a class="pcard text" href="%s" target="_blank" rel="noopener">'%u) if u else '<div class="pcard text">')+'<div class="b"><h3>%s</h3><p>%s</p></div>'%(n,d)+('</a>' if u else '</div>') for n,d,u in L)+'</div>'
+proj+='<h2>Open-source mini-projects</h2>'+_cards(MINIS)+'</section>'
 open(os.path.join(ROOT,"projects.html"),"w").write(shell("Projects - Xin Xia",proj,"projects"))
 for t in THEMES:
     body='<section><p class="back"><a href="projects.html">&larr; All projects</a></p><h1 class="ph">%s</h1>'%t["title"]
