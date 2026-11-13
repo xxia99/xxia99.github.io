@@ -368,3 +368,4 @@ html.th body,html.th main section,html.th .nav,html.th .bcard,html.th .pcard,htm
 [data-theme="dark"] .ri li a:hover{background:var(--accent);color:#12161c}
 .bbar{text-transform:none;letter-spacing:-.003em;font-size:14.5px;font-weight:500;padding:8px 10px}
 @media (min-width:761px) and (max-width:1040px){.bbar{white-space:normal;min-height:54px;display:grid;place-items:center;line-height:1.2;font-size:13.5px}}
+html{background:#f4f6f8}html[data-theme="dark"]{background:#12161c}

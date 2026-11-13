@@ -224,7 +224,7 @@ def shell(title,body,page):
 <main class="page">
 {body}
 </main>
-<footer class="foot">&copy; 2026 Xin Xia &middot; <a href="mailto:xxia65@wisc.edu">xxia65@wisc.edu</a> &middot; Department of Industrial and Systems Engineering, University of Wisconsin-Madison.</footer>
+<footer class="foot">&copy; 2026 Xin Xia</footer>
 <div class="lb" id="lb"><img src="" alt=""><video controls loop playsinline></video><div class="cap"></div></div>
 <script>
 (function(){{var lb=document.getElementById('lb'),im=lb.querySelector('img'),vd=lb.querySelector('video'),cp=lb.querySelector('.cap');
