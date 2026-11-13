@@ -369,3 +369,14 @@ html.th body,html.th main section,html.th .nav,html.th .bcard,html.th .pcard,htm
 .bbar{text-transform:none;letter-spacing:-.003em;font-size:14.5px;font-weight:500;padding:8px 10px}
 @media (min-width:761px) and (max-width:1040px){.bbar{white-space:normal;min-height:54px;display:grid;place-items:center;line-height:1.2;font-size:13.5px}}
 html{background:#f4f6f8}html[data-theme="dark"]{background:#12161c}
+
+/* news: recent items first, the rest behind a button */
+.news.nc:not(.open) .more{display:none}
+.news.nc.open .more{animation:fadein .35s ease-out both}
+.nmore{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin-top:16px;padding:6px 14px;border:1px solid var(--line);border-radius:999px;font-size:13.5px;color:var(--ink);transition:background-color .16s ease,color .16s ease,border-color .16s ease,transform .14s var(--ease-out)}
+.nmore::after{content:"";width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .2s var(--ease-out)}
+.nmore[aria-expanded="true"]::after{transform:rotate(-135deg) translateY(-2px)}
+.nmore:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+.nmore:active{transform:scale(.97)}.nmore:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.nmore[hidden]{display:none}
+[data-theme="dark"] .nmore{border-color:rgba(255,255,255,.22)}[data-theme="dark"] .nmore:hover{background:#e8ecf1;border-color:#e8ecf1;color:#12161c}

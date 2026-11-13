@@ -253,6 +253,7 @@ var rv=[].slice.call(document.querySelectorAll('main section,.bcard,.pcard.mini,
 var ro=new IntersectionObserver(function(es){{var n=0;es.forEach(function(en){{if(!en.isIntersecting)return;var e=en.target;ro.unobserve(e);e.style.transitionDelay=(n++*80)+'ms';e.classList.add('in');
 setTimeout(function(){{e.classList.remove('rv','in');e.style.transitionDelay='';}},800+n*80);}});}},{{threshold:.06,rootMargin:'0px 0px -6% 0px'}});
 rv.forEach(function(e){{ro.observe(e);}});}}
+var nl=document.getElementById('newslist'),nb=document.getElementById('nmore');if(nl&&nb){{nl.classList.add('nc');nb.hidden=false;nb.addEventListener('click',function(){{var o=nl.classList.toggle('open');nb.setAttribute('aria-expanded',o?'true':'false');nb.textContent=o?'Show fewer':'Show '+nb.getAttribute('data-n')+' earlier';if(!o){{var r=document.getElementById('news').getBoundingClientRect();if(r.top<0)window.scrollTo(0,window.scrollY+r.top-90);}}}});}}
 var tg=document.getElementById('tgl'),mt=document.querySelector('meta[name="theme-color"]');
 function paint(){{var d=document.documentElement.getAttribute('data-theme')==='dark';if(mt)mt.setAttribute('content',d?'#12161c':'#2F3A4A');if(tg)tg.setAttribute('aria-pressed',d?'true':'false');}}
 paint();if(tg)tg.addEventListener('click',function(){{var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.classList.add('th');document.documentElement.setAttribute('data-theme',n);try{{localStorage.setItem('theme',n);}}catch(e){{}}paint();setTimeout(function(){{document.documentElement.classList.remove('th');}},350);}});
@@ -288,7 +289,10 @@ elif PLAN=="b":
       +"".join('<a class="dcol" href="project-%s.html"><div class="dbox">%s</div></a>'%(t["slug"],t["title"]) for t in THEMES)+'</div></section>')
 else:
     roadmap=""
-news='<section id="news"><h2>News</h2><div class="news">'+"".join(f'<div class="d">{d}</div><div>{t}</div>' for d,t in NEWS)+'</div></section>'
+NEWS_SHOWN=4
+news=('<section id="news"><h2>News</h2><div class="news" id="newslist">'
+      +"".join('<div class="d%s">%s</div><div%s>%s</div>'%(" more" if i>=NEWS_SHOWN else "",d,' class="more"' if i>=NEWS_SHOWN else "",t) for i,(d,t) in enumerate(NEWS))
+      +'</div>'+(f'<button class="nmore" id="nmore" type="button" hidden aria-expanded="false" aria-controls="newslist" data-n="{len(NEWS)-NEWS_SHOWN}">Show {len(NEWS)-NEWS_SHOWN} earlier</button>' if len(NEWS)>NEWS_SHOWN else '')+'</section>')
 SELECTED=["dispatchppo","scan","hass","kappa","bsac","causal"]
 research='<section id="research"><h2>Selected research <a class="more" href="publications.html">All publications &rarr;</a></h2>'
 for g in ["2026","2025","2024","Under review"]:
