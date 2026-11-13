@@ -357,3 +357,12 @@ html.th body,html.th main section,html.th .nav,html.th .bcard,html.th .pcard,htm
 [data-theme="dark"] .foot{color:var(--muted)}[data-theme="dark"] .foot a{color:var(--accent)}
 [data-theme="dark"] .hero p.thesis{color:var(--ink)}
 @media (max-width:760px){.tgl{width:30px;height:30px;margin-left:2px}[data-theme="dark"] .vt .vi:nth-child(n){border-left-color:rgba(255,255,255,.16)}}
+
+/* research interests are links to their project pages */
+.ri li{padding:0;background:none}
+.ri li a{display:block;padding:4px 11px;border-radius:999px;background:var(--tint);color:#4a5665;transition:background-color .16s ease,color .16s ease,transform .14s var(--ease-out)}
+.ri li a:hover{background:var(--accent);color:#fff;text-decoration:none}
+.ri li a:active{transform:scale(.97)}
+[data-theme="dark"] .ri li{background:none}
+[data-theme="dark"] .ri li a{background:rgba(255,255,255,.08);color:#c5ced8}
+[data-theme="dark"] .ri li a:hover{background:var(--accent);color:#12161c}
