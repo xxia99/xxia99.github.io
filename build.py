@@ -1,3 +1,4 @@
+import re
 #!/usr/bin/env python3
 """Generate the one-page site xxia99.github.io (al-folio style, half-and-half research rows). Run: python build.py"""
 import os
@@ -13,7 +14,7 @@ PUBS=[
  dict(k="dispatchppo",badge="NeurIPS",title="Learning Collision-Free Dispatch Policies for Route-Wise Decision-Dependent Anomaly Detection",
       au="<b>Xin Xia</b>, Chen Zhang, and Kaibo Liu",venue="Advances in Neural Information Processing Systems (NeurIPS), 2026",status="",award="",
       abs="A dispatch policy for UAV fleets that assigns destinations one vehicle at a time, so joint moves are collision-free by construction and decoded in linear time, with guarantees on coverage, focusing, and detection delay. Validated on the Robotarium and on a wildfire rebuilt from satellite frames.",
-      links=[("Poster","data/posters/NeurIPS2026_DispatchPPO_poster.pdf")],year="2026",cap="NeurIPS 2026 poster",lab="Poster",sel=True),
+      links=[("Code","https://github.com/xxia99/DispatchPPO"),("Poster","data/posters/NeurIPS2026_DispatchPPO_poster.pdf")],year="2026",cap="NeurIPS 2026 poster",lab="Poster",sel=True),
  dict(k="scan",badge="INFORMS",title="SCAN: Networked Multi-Agent Reinforcement Learning for Decentralized Anomaly Detection in Graph-Structured Systems",
       au="<b>Xin Xia</b> and Kaibo Liu",venue="INFORMS Annual Meeting, 2026",status="journal version in preparation",award='<b class="win">Winner</b>INFORMS QSR Best Refereed Paper Award, 2026',award_url="https://connect.informs.org/discussion/informs-2026-best-referred-paper-competition-finalists#:~:text=SCAN%3A%20Networked%20Multi-Agent%20Reinforcement%20Learning",
       abs="Each drone learns from its own evidence and a few messages from neighbours, moves safely under mobility constraints, and the team raises a calibrated alarm. Demonstrated on wildfire and traffic cases with a drone fleet in a 3D simulator.",
@@ -207,7 +208,7 @@ def shell(title,body,page):
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png?v=4">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=4">
 <link rel="manifest" href="/site.webmanifest?v=4">
-<meta name="theme-color" content="#262277">
+<meta name="theme-color" content="#2F3A4A">
 <meta name="author" content="Xin Xia">
 <meta name="description" content="{DESC}">
 <meta property="og:title" content="{title}">
@@ -226,9 +227,13 @@ def shell(title,body,page):
 <div class="lb" id="lb"><img src="" alt=""><video controls loop playsinline></video><div class="cap"></div></div>
 <script>
 (function(){{var lb=document.getElementById('lb'),im=lb.querySelector('img'),vd=lb.querySelector('video'),cp=lb.querySelector('.cap');
-function close(){{lb.classList.remove('open');im.src='';vd.pause();vd.removeAttribute('src');vd.load();lb.classList.remove('isvideo');}}
-document.querySelectorAll('a[data-lb]').forEach(function(a){{a.addEventListener('click',function(e){{e.preventDefault();var v=a.getAttribute('data-video');
-if(v){{lb.classList.add('isvideo');vd.src=v;vd.currentTime=0;vd.play().catch(function(){{}});}}else{{lb.classList.remove('isvideo');var h=a.getAttribute('href');im.style.width='';im.style.background='';im.onload=function(){{if(/\\.svg$/.test(h)&&im.naturalHeight){{var ar=im.naturalWidth/im.naturalHeight;im.style.width=Math.min(window.innerWidth*0.92,window.innerHeight*0.86*ar)+'px';im.style.background='#fff';}}}};im.src=h;}}
+var src=null,rm=matchMedia('(prefers-reduced-motion: reduce)').matches,EZ='cubic-bezier(.23,1,.32,1)';
+function fromSrc(el){{var s=src.getBoundingClientRect(),t=el.getBoundingClientRect();if(!t.width||!s.width)return null;return 'translate('+(s.left-t.left)+'px,'+(s.top-t.top)+'px) scale('+(s.width/t.width)+','+(s.height/t.height)+')';}}
+function zoomIn(el){{if(!src||rm)return;el.style.transition='none';el.style.transform='none';var f=fromSrc(el);if(!f)return;el.style.transformOrigin='top left';el.style.transform=f;el.getBoundingClientRect();el.style.transition='transform .36s '+EZ;el.style.transform='none';}}
+function finish(){{lb.classList.remove('open','closing');im.src='';vd.pause();vd.removeAttribute('src');vd.load();lb.classList.remove('isvideo');[im,vd].forEach(function(el){{el.style.transition='';el.style.transform='';}});src=null;}}
+function close(){{if(!lb.classList.contains('open')||lb.classList.contains('closing'))return;var el=lb.classList.contains('isvideo')?vd:im;if(src&&!rm&&document.body.contains(src)){{el.style.transition='none';el.style.transform='none';var f=fromSrc(el);if(f){{el.style.transformOrigin='top left';el.getBoundingClientRect();el.style.transition='transform .26s '+EZ;el.style.transform=f;lb.classList.add('closing');setTimeout(finish,250);return;}}}}finish();}}
+document.querySelectorAll('a[data-lb]').forEach(function(a){{a.addEventListener('click',function(e){{e.preventDefault();var v=a.getAttribute('data-video');src=a.querySelector('img,video')||a;
+if(v){{lb.classList.add('isvideo');vd.onloadedmetadata=function(){{zoomIn(vd);}};vd.src=v;vd.currentTime=0;vd.play().catch(function(){{}});}}else{{lb.classList.remove('isvideo');var h=a.getAttribute('href');im.style.width='';im.style.background='';im.onload=function(){{if(/\\.svg$/.test(h)&&im.naturalHeight){{var ar=im.naturalWidth/im.naturalHeight;im.style.width=Math.min(window.innerWidth*0.92,window.innerHeight*0.86*ar)+'px';im.style.background='#fff';}}zoomIn(im);}};im.src=h;}}
 cp.textContent=a.getAttribute('data-lb')||'';lb.classList.add('open');}});}});
 lb.addEventListener('click',function(e){{if(e.target!==vd)close();}});
 document.addEventListener('keydown',function(e){{if(e.key==='Escape')close();}});
@@ -242,6 +247,11 @@ if(window.innerWidth<=700){{L.classList.add('col');return;}}
 L.classList.remove('col');var inner=L.clientWidth-14*(figs.length-1);figs.forEach(function(f,i){{f.style.flex='0 0 '+(inner*ars[i]/sum)+'px';}});}});}}
 fit();window.addEventListener('resize',fit);window.addEventListener('load',fit);
 if('IntersectionObserver' in window){{var io=new IntersectionObserver(function(es){{es.forEach(function(e){{var v=e.target;if(e.isIntersecting){{v.play().catch(function(){{}});}}else{{v.pause();}}}});}},{{threshold:.2}});document.querySelectorAll('main video').forEach(function(v){{io.observe(v);}});}}
+if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){{document.documentElement.classList.add('js');
+var rv=[].slice.call(document.querySelectorAll('main section,.bcard,.pcard.mini,.bbar'));rv.forEach(function(e){{e.classList.add('rv');}});
+var ro=new IntersectionObserver(function(es){{var n=0;es.forEach(function(en){{if(!en.isIntersecting)return;var e=en.target;ro.unobserve(e);e.style.transitionDelay=(n++*80)+'ms';e.classList.add('in');
+setTimeout(function(){{e.classList.remove('rv','in');e.style.transitionDelay='';}},800+n*80);}});}},{{threshold:.06,rootMargin:'0px 0px -6% 0px'}});
+rv.forEach(function(e){{ro.observe(e);}});}}
 }})();
 </script>
 </body>
@@ -257,7 +267,8 @@ AW2='https://myemail.constantcontact.com/QCRE-News---May-2025.html?aid=vKcqr1w06
 FOUR=(' My work covers four directions: <a href="project-fleets.html">robot and drone fleets for anomaly detection</a>, <a href="project-multi-agent.html">multi-agent systems for decision making</a>, <a href="project-language-models.html">foundation models and large language models</a>, and <a href="project-supply-chain.html">AI-driven supply chain management</a>.') if os.environ.get("PLAN","c")=="c" else ""
 hero=f"""<section id="about"><header class="hero"><div><h1><b>Xin</b> Xia</h1>
 <p>I am a Ph.D. candidate in <a href="https://engineering.wisc.edu/departments/industrial-systems-engineering/">Industrial and Systems Engineering</a> at the University of Wisconsin-Madison, advised by <a href="https://kaibo.ie.wisc.edu/index.html">Prof. Kaibo Liu</a>. I received my M.Sc. in Electrical and Computer Engineering from Georgia Tech and my B.Eng. in Electrical Engineering and Automation from Tianjin University.</p>
-<p>My research develops reliable AI for decision-making in budgeted systems, where information acquisition is constrained and decisions incur costs. This raises four questions: how to represent heterogeneous data, what to observe, how to act, and how to coordinate.</p>
+<p class="thesis">My research develops <b>reliable AI for decision-making in budgeted systems</b>, where information acquisition is constrained and decisions incur costs.</p>
+<p>This raises four questions: how to represent heterogeneous data, what to observe, how to act, and how to coordinate.</p>
 <p>I pursue two connected lines of work. <b class="ln">Representation and prediction:</b> multimodal data fusion built on foundation models (LLMs, VLMs), with applications in <a href="project-language-models.html">interpretable knowledge discovery from unstructured data</a> and clinical decision support. <b class="ln">AI-driven decision-making:</b> multi-agent reinforcement learning and data-driven optimization with statistical guarantees for sensing, acting, and coordination, with applications in <a href="project-fleets.html">embodied AI for autonomous fleets of robots and drones</a> and resilient networked systems in <a href="project-multi-agent.html">manufacturing</a> and <a href="project-supply-chain.html">supply chains</a>.</p>
 <p>My work has appeared in NeurIPS, <em>Technometrics</em>, <em>IEEE Transactions on Engineering Management</em>, and the <em>International Journal of Production Economics</em>. It received the <a class="hot" href="{AW1}" target="_blank" rel="noopener">INFORMS QSR Best Refereed Paper Award</a> (2026) and was a finalist in the <a class="hot" href="{AW2}" target="_blank" rel="noopener">IISE QCRE Best Track Paper Competition</a> (2025). I serve as a reviewer for NeurIPS, <em>IEEE Transactions on Automation Science and Engineering</em>, <em>PNAS</em>, and <em>PNAS Nexus</em>.</p>
 <p class="links"><a href="mailto:xxia65@wisc.edu">Email</a><a href="data/XinXia-CV.pdf">CV</a><a href="https://scholar.google.com/citations?user=baRH_vIAAAAJ&amp;hl=en">Google Scholar</a><a href="https://github.com/xxia99">GitHub</a><a href="https://www.linkedin.com/in/xin-xia-678546204/" target="_blank" rel="noopener">LinkedIn</a><a href="https://orcid.org/0009-0006-2910-7778" target="_blank" rel="noopener">ORCID</a></p>
@@ -297,8 +308,15 @@ def card(t):
     return ('<a class="pcard" href="project-%s.html"><div class="cover %s"><img src="%s" alt="" loading="lazy"></div><div class="b"><h3>%s</h3></div></a>'
             %(t["slug"],t["fit"],t["cover"],t["title"]))
 proj='<section id="projects"><h1>Projects</h1>'
-proj+=('<h2><span><b>Research projects:</b> reliable AI for decision-making in budgeted systems</span></h2><div class="dia chev"><div class="dlines"><span>Representation and prediction</span><span>AI-driven decision-making</span></div><div class="dcols">'
-  +"".join('<a class="dcol" href="project-%s.html"><div class="dq">%s</div><div class="dimg %s"><img src="%s" alt="" loading="lazy"></div><div class="dbox">%s</div><div class="dtech">%s</div></a>'%(t["slug"],t["q"],t["fit"],t["cover"],t["short"],t["tech"]) for t in THEMES)+'</div></div>')
+def _chips(txt):
+    parts=re.split(r',\s*(?![^()]*\))',txt)
+    return '<div class="bchips">'+"".join('<span>%s</span>'%(p[0].upper()+p[1:]) for p in parts if p)+'</div>'
+def _bcard(i,t):
+    return ('<a class="bcard" href="project-%s.html"><div class="bhead"><span class="bnum">%d</span><span class="bq">%s</span></div><div class="bimg"><img src="%s" alt="" loading="lazy"></div><div class="bt">%s</div>%s</a>'
+            %(t["slug"],i,t["q"],t["cover"],t["short"],_chips(t["tech"])))
+proj+=('<h2><span><b>Research projects:</b> reliable AI for decision-making in budgeted systems</span></h2><div class="bento">'
+  '<div class="bcol"><div class="bbar">Representation and prediction</div><div class="brow" style="--n:1">'+_bcard(1,THEMES[0])+'</div></div>'
+  '<div class="bcol"><div class="bbar">AI-driven decision-making</div><div class="brow" style="--n:3">'+"".join(_bcard(i+2,t) for i,t in enumerate(THEMES[1:]))+'</div></div></div>')
 MINIS=[("Energy system scenario generation","DCGAN, Wasserstein GAN","https://github.com/xxia99/DCGAN-for-Scenario-Generation",
         dict(video="images/mini/gan_training.mp4",poster="images/mini/gan_training.jpg",cap="Generated daily scenarios during training")),
        ("Patient outcome prediction from text","Tabular-to-text conversion, BERT embeddings, MLP classifier","https://github.com/xxia99/Text-Classification",
@@ -312,12 +330,15 @@ def _mini(n,d,u,m):
     elif m:
         cov='<a class="cover contain" href="%s" data-lb="%s"><img src="%s" alt="%s" loading="lazy"></a>'%(m["image"],m["cap"],m["image"],m["cap"])
     t='<a href="%s" target="_blank" rel="noopener">%s</a>'%(u,n) if u else n
-    return '<div class="pcard mini">%s<div class="b"><h3>%s</h3><p>%s</p></div></div>'%(cov,t,d)
+    return '<div class="pcard mini">%s<div class="b"><h3>%s</h3>%s</div></div>'%(cov,t,_chips(d))
 proj+='<h2><b>Mini projects</b></h2><div class="pgrid three">'+"".join(_mini(*x) for x in MINIS)+'</div></section>'
 open(os.path.join(ROOT,"projects.html"),"w").write(shell("Projects - Xin Xia",proj,"projects"))
-for t in THEMES:
+for ti,t in enumerate(THEMES):
     body='<section><p class="back"><a href="projects.html">&larr; All projects</a></p><h1 class="ph">%s</h1>'%t["title"]
-    body+="".join(proj_html(BYK0[k]) for k in t["keys"])+'</section>'
+    pv=THEMES[ti-1] if ti>0 else None; nx=THEMES[ti+1] if ti<len(THEMES)-1 else None
+    pn='<nav class="pn">%s%s</nav>'%(('<a class="pv" href="project-%s.html"><span>Previous project</span>&larr; %s</a>'%(pv["slug"],pv["title"])) if pv else '<span></span>',
+                                     ('<a class="nx" href="project-%s.html"><span>Next project</span>%s &rarr;</a>'%(nx["slug"],nx["title"])) if nx else '<span></span>')
+    body+="".join(proj_html(BYK0[k]) for k in t["keys"])+pn+'</section>'
     open(os.path.join(ROOT,"project-%s.html"%t["slug"]),"w").write(shell("%s - Xin Xia"%t["title"],body,"projects"))
 
 # ---------------------------------------------------------------- publications page (text only)
@@ -357,3 +378,26 @@ open(os.path.join(ROOT,"talks.html"),"w").write(shell("Invited talks - Xin Xia",
 for fn,sec in [("news.html","news"),("cv.html","experience")]:
     open(os.path.join(ROOT,fn),"w").write(f'<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Xin Xia</title><meta http-equiv="refresh" content="0; url=index.html#{sec}"><link rel="canonical" href="https://xxia99.com/#{sec}"></head><body><a href="index.html#{sec}">Continue to xxia99.com</a></body></html>\n')
 print("built index.html, publications.html and projects.html with",len(PUBS),"publications")
+
+# ---------------------------------------------------------------- design checks (see project design rules)
+def check_design():
+    """Fail the build on: figures with transparency or SVG masks/filters; long dashes in generated pages."""
+    import glob
+    from PIL import Image
+    bad=[]
+    for f in sorted(glob.glob(os.path.join(ROOT,"images","fulls","*"))+glob.glob(os.path.join(ROOT,"images","mini","*"))):
+        low=f.lower()
+        if low.endswith(".svg"):
+            t=open(f,errors="ignore").read()
+            if "<mask" in t or "<filter" in t: bad.append("SVG uses mask/filter: "+os.path.relpath(f,ROOT))
+        elif low.endswith(".png"):
+            im=Image.open(f)
+            if im.mode in ("RGBA","LA") and im.getchannel("A").getextrema()[0]<255: bad.append("PNG has transparency: "+os.path.relpath(f,ROOT))
+    for f in sorted(glob.glob(os.path.join(ROOT,"*.html"))):
+        t=open(f,encoding="utf-8",errors="ignore").read()
+        for ch,name in (("\u2013","en dash"),("\u2014","em dash"),("&ndash;","en dash"),("&mdash;","em dash")):
+            if ch in t: bad.append("%s in %s"%(name,os.path.basename(f)))
+    if bad:
+        print("DESIGN CHECK FAILED:"); [print("  - "+b) for b in bad]; raise SystemExit(1)
+    print("design checks passed")
+check_design()
