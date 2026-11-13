@@ -209,6 +209,7 @@ def shell(title,body,page):
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=5">
 <link rel="manifest" href="/site.webmanifest?v=5">
 <meta name="theme-color" content="#2F3A4A">
+<script>(function(){{var t=null;try{{t=localStorage.getItem('theme');}}catch(e){{}}if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}})();</script>
 <meta name="author" content="Xin Xia">
 <meta name="description" content="{DESC}">
 <meta property="og:title" content="{title}">
@@ -219,7 +220,7 @@ def shell(title,body,page):
 <link rel="stylesheet" href="assets/site.css?v={CSSV}">
 </head>
 <body>
-<nav class="nav"><div class="in"><a class="brand" href="index.html"><b>Xin</b> Xia</a><ul>{nav}</ul></div></nav>
+<nav class="nav"><div class="in"><a class="brand" href="index.html"><b>Xin</b> Xia</a><ul>{nav}</ul><button class="tgl" id="tgl" type="button" aria-label="Switch between light and dark mode" title="Light or dark mode"><svg class="i-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></div></nav>
 <main class="page">
 {body}
 </main>
@@ -248,10 +249,13 @@ L.classList.remove('col');var inner=L.clientWidth-14*(figs.length-1);figs.forEac
 fit();window.addEventListener('resize',fit);window.addEventListener('load',fit);
 if('IntersectionObserver' in window){{var io=new IntersectionObserver(function(es){{es.forEach(function(e){{var v=e.target;if(e.isIntersecting){{v.play().catch(function(){{}});}}else{{v.pause();}}}});}},{{threshold:.2}});document.querySelectorAll('main video').forEach(function(v){{io.observe(v);}});}}
 if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){{document.documentElement.classList.add('js');
-var rv=[].slice.call(document.querySelectorAll('main section,.bcard,.pcard.mini,.bbar'));rv.forEach(function(e){{e.classList.add('rv');}});
+var rv=[].slice.call(document.querySelectorAll('main section,.bcard,.pcard.mini,.bbar,.pub,.proj'));rv.forEach(function(e){{e.classList.add('rv');}});
 var ro=new IntersectionObserver(function(es){{var n=0;es.forEach(function(en){{if(!en.isIntersecting)return;var e=en.target;ro.unobserve(e);e.style.transitionDelay=(n++*80)+'ms';e.classList.add('in');
 setTimeout(function(){{e.classList.remove('rv','in');e.style.transitionDelay='';}},800+n*80);}});}},{{threshold:.06,rootMargin:'0px 0px -6% 0px'}});
 rv.forEach(function(e){{ro.observe(e);}});}}
+var tg=document.getElementById('tgl'),mt=document.querySelector('meta[name="theme-color"]');
+function paint(){{var d=document.documentElement.getAttribute('data-theme')==='dark';if(mt)mt.setAttribute('content',d?'#12161c':'#2F3A4A');if(tg)tg.setAttribute('aria-pressed',d?'true':'false');}}
+paint();if(tg)tg.addEventListener('click',function(){{var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.classList.add('th');document.documentElement.setAttribute('data-theme',n);try{{localStorage.setItem('theme',n);}}catch(e){{}}paint();setTimeout(function(){{document.documentElement.classList.remove('th');}},350);}});
 }})();
 </script>
 </body>
