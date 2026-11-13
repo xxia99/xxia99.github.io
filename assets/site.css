@@ -334,7 +334,7 @@ html.th body,html.th main section,html.th .nav,html.th .bcard,html.th .pcard,htm
 [data-theme="dark"] main section{background:#1b212a;border-color:rgba(255,255,255,.07);box-shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px rgba(0,0,0,.28)}
 [data-theme="dark"] .pub,[data-theme="dark"] .proj{background:transparent;border-color:rgba(255,255,255,.10)}
 [data-theme="dark"] .bcard,[data-theme="dark"] .pcard,[data-theme="dark"] .pcard.mini{background:#222a35;border-color:rgba(255,255,255,.08);box-shadow:0 1px 2px rgba(0,0,0,.3),0 6px 16px rgba(0,0,0,.25);color:var(--ink)}
-[data-theme="dark"] .bbar{background:#dfe5ec;color:#161b22}
+[data-theme="dark"] .bbar{background:#4a5a70;color:#f2f5f8}
 [data-theme="dark"] .bnum{background:rgba(255,255,255,.10);color:var(--ink)}
 [data-theme="dark"] .bchips span,[data-theme="dark"] .ri li{background:rgba(255,255,255,.08);color:#c5ced8}
 [data-theme="dark"] .bimg,[data-theme="dark"] .pcard.mini .cover,[data-theme="dark"] .pcard .cover{background:#f4f6f8}
