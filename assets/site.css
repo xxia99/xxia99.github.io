@@ -1,3 +1,6 @@
+@font-face{font-family:Roboto;font-style:normal;font-weight:300 700;font-display:swap;src:url(fonts/roboto-normal-2.woff2) format('woff2')}
+@font-face{font-family:Roboto;font-style:italic;font-weight:400;font-display:swap;src:url(fonts/roboto-italic-1.woff2) format('woff2')}
+img{height:auto}
 :root{--accent:#2b5c94;--hot:#c5050c;--ink:#212529;--muted:#6c757d;--faint:#adb5bd;--rule:#e9ecef;--bg:#fff;--soft:#f8f9fa}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:72px}

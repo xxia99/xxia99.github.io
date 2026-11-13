@@ -96,7 +96,7 @@ DEMOS={
           I("kappa.png",835,335,"KAPPA: portrait generation and portrait-based analytics","Framework overview"),
           I("kappa_result.svg",464,138,"Hyperparameter sensitivity on the expert-verified Patent-2k test set","Hyperparameter sensitivity")],
  "bsac":[I("bsac_bdrl.png",800,674,"Bilevel deep reinforcement learning: upper-level and lower-level agents in the BIMDP environment","Bilevel learning framework"),
-         I("bsac_result.svg",174,172,"Learning curves of the upper-level and lower-level agents on the laptop and electric-vehicle cases","Learning curves"),
+         I("bsac_result.png",2400,2374,"Learning curves of the upper-level and lower-level agents on the laptop and electric-vehicle cases","Learning curves"),
          I("bsac_sensitivity.svg",1800,648,"Sensitivity of the product-design and remanufacturing objectives (laptop and electric-vehicle cases)","Sensitivity analysis")],
  "ijpe":[I("ijpe_policy.svg",330,132,"Policy network of the adapted SAC: reparameterization, action bounding and action discretization","Policy network"),
          I("ijpe_value.svg",302,183,"Value network with element-wise value estimation","Value network"),
@@ -142,7 +142,7 @@ def media(m):
     w,h=_size(m); ar=' style="aspect-ratio:%d/%d"'%(w,h)
     fig='<figcaption>%s</figcaption>'%m["fig"] if m.get("fig") else ""
     if "video" in m:
-        a='<a class="media" href="%s" data-lb="%s" data-video="%s"><video src="%s" poster="%s" muted loop playsinline autoplay preload="metadata"%s></video></a>'%(m["full"],m["cap"],m["video"],m["video"],m["poster"],ar)
+        a='<a class="media" href="%s" data-lb="%s" data-video="%s"><video src="%s" poster="%s" muted loop playsinline autoplay preload="auto"%s></video></a>'%(m["full"],m["cap"],m["video"],m["video"],m["poster"],ar)
     else:
         a='<a class="media" href="%s" data-lb="%s"><img src="%s" alt="" loading="lazy"%s></a>'%(m["image"],m["cap"],m["image"],ar)
     return '<figure class="fig" style="--ar:%.4f">%s%s</figure>'%(w/h,a,fig)
@@ -190,7 +190,30 @@ def proj_html(p):
 DESC="Xin Xia - Ph.D. candidate in Industrial Engineering at the University of Wisconsin-Madison. Reliable decisions in budgeted systems: multimodal foundation models, statistical process control, bilevel optimization, and multi-agent reinforcement learning."
 import hashlib
 CSSV=hashlib.md5(open(os.path.join(ROOT,"assets","site.css"),"rb").read()).hexdigest()[:8]
+_SIZE={}
+def _opt(html):
+    """Use the .webp copy of an image when one exists, and give every <img> its size and loading hints."""
+    def webp(m):
+        p=m.group(2); w=p+".webp"
+        return m.group(1)+(w if os.path.exists(os.path.join(ROOT,w)) else p)+'"'
+    html=re.sub(r'((?:src|href|poster)=")(images/[^"]+\.(?:png|jpe?g))"',webp,html)
+    def img(m):
+        tag=m.group(0); src=re.search(r'src="(images/[^"]+)"',tag)
+        if not src: return tag
+        p=src.group(1); add=""
+        if "width=" not in tag and not p.endswith(".svg"):
+            if p not in _SIZE:
+                from PIL import Image
+                _SIZE[p]=Image.open(os.path.join(ROOT,p)).size
+            add+=' width="%d" height="%d"'%_SIZE[p]
+        if "avatar" in p: add+=' fetchpriority="high"'
+        else:
+            add+=' decoding="async"'
+        return tag[:-1].replace(' loading="lazy"','')+add+">"
+    return re.sub(r'<img [^>]*>',img,html)
 def shell(title,body,page):
+    return _opt(_shell(title,body,page))
+def _shell(title,body,page):
     pre="" if page=="index" else "index.html"
     items=[("index.html","about"),("publications.html","publications"),("talks.html","talks"),("projects.html","projects"),("data/XinXia-CV.pdf","cv")]
     nav="".join('<li><a href="%s"%s>%s</a></li>'%(h+('" target="_blank" rel="noopener' if h.endswith(".pdf") else ""),' class="on"' if (page==n or (page=="index" and n=="about")) else "","CV" if n=="cv" else n.capitalize()) for h,n in items)
@@ -215,8 +238,7 @@ def shell(title,body,page):
 <meta property="og:title" content="{title}">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://xxia99.com/images/avatar.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/roboto-normal-2.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/site.css?v={CSSV}">
 </head>
 <body>
@@ -247,7 +269,8 @@ figs.forEach(function(f){{f.style.flex='';}});
 if(window.innerWidth<=700){{L.classList.add('col');return;}}
 L.classList.remove('col');var inner=L.clientWidth-14*(figs.length-1);figs.forEach(function(f,i){{f.style.flex='0 0 '+(inner*ars[i]/sum)+'px';}});}});}}
 fit();window.addEventListener('resize',fit);window.addEventListener('load',fit);
-if('IntersectionObserver' in window){{var io=new IntersectionObserver(function(es){{es.forEach(function(e){{var v=e.target;if(e.isIntersecting){{v.play().catch(function(){{}});}}else{{v.pause();}}}});}},{{threshold:.2}});document.querySelectorAll('main video').forEach(function(v){{io.observe(v);}});}}
+function vload(v){{if(!v.getAttribute('src')&&v.getAttribute('data-src'))v.src=v.getAttribute('data-src');}}
+if('IntersectionObserver' in window){{var io=new IntersectionObserver(function(es){{es.forEach(function(e){{var v=e.target;if(e.isIntersecting){{vload(v);v.play().catch(function(){{}});}}else if(v.getAttribute('src')){{v.pause();}}}});}},{{threshold:.15}});document.querySelectorAll('main video').forEach(function(v){{io.observe(v);}});}}else{{document.querySelectorAll('main video').forEach(function(v){{vload(v);v.play().catch(function(){{}});}});}}
 if('IntersectionObserver' in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){{document.documentElement.classList.add('js');
 var rv=[].slice.call(document.querySelectorAll('main section,.bcard,.pcard.mini,.bbar,.pub,.proj'));rv.forEach(function(e){{e.classList.add('rv');}});
 var ro=new IntersectionObserver(function(es){{var n=0;es.forEach(function(en){{if(!en.isIntersecting)return;var e=en.target;ro.unobserve(e);e.style.transitionDelay=(n++*80)+'ms';e.classList.add('in');
@@ -300,7 +323,7 @@ for g in ["2026","2025","2024","Under review"]:
     if items: research+=f'<div class="year">{g}</div><div class="pubs">{"".join(pub_html(p) for p in items)}</div>'
 research+='</section>'
 TIMELINE=[("2025 - present","Ph.D. candidate, University of Wisconsin-Madison","Industrial and Systems Engineering. Advisor: Prof. Kaibo Liu.","uw.svg","University of Wisconsin-Madison",""),
-          ("2022 - 2025","Research assistant, Tsinghua University",'<a href="https://thu-sail-lab.github.io/home/" target="_blank" rel="noopener">SAIL Lab</a>. Advisor: <a href="https://www.ie.tsinghua.edu.cn/eng/info/1051/1031.htm" target="_blank" rel="noopener">Prof. Chen Zhang</a>.',"tsinghua.svg","Tsinghua University",""),
+          ("2022 - 2025","Research assistant, Tsinghua University",'<a href="https://thu-sail-lab.github.io/home/" target="_blank" rel="noopener">SAIL Lab</a>. Advisor: <a href="https://www.ie.tsinghua.edu.cn/eng/info/1051/1031.htm" target="_blank" rel="noopener">Prof. Chen Zhang</a>.',"tsinghua.png","Tsinghua University",""),
           ("2021 - 2022","AI researcher intern, Ping An Technology","Computer vision and multimodal models.","pingan-tech.png","Ping An Technology"," wide pa"),
           ("2020 - 2022","M.Sc., Georgia Institute of Technology","Electrical and Computer Engineering.","gatech.svg","Georgia Institute of Technology",""),
           ("2016 - 2020","B.Eng., Tianjin University","Electrical Engineering and Automation.","tju.png","Tianjin University","")]
@@ -334,7 +357,7 @@ MINIS=[("Energy system scenario generation","DCGAN, Wasserstein GAN","https://gi
 def _mini(n,d,u,m):
     cov=""
     if m and "video" in m:
-        cov='<a class="cover contain" href="%s" data-lb="%s" data-video="%s"><video src="%s" poster="%s" muted loop playsinline autoplay preload="metadata"></video></a>'%(m["poster"],m["cap"],m["video"],m["video"],m["poster"])
+        cov='<a class="cover contain" href="%s" data-lb="%s" data-video="%s"><video src="%s" poster="%s" muted loop playsinline autoplay preload="auto"></video></a>'%(m["poster"],m["cap"],m["video"],m["video"],m["poster"])
     elif m:
         cov='<a class="cover contain" href="%s" data-lb="%s"><img src="%s" alt="%s" loading="lazy"></a>'%(m["image"],m["cap"],m["image"],m["cap"])
     t='<a href="%s" target="_blank" rel="noopener">%s</a>'%(u,n) if u else n
