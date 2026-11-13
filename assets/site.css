@@ -350,7 +350,7 @@ html.th body,html.th main section,html.th .nav,html.th .bcard,html.th .pcard,htm
 [data-theme="dark"] .pn a{border-color:rgba(255,255,255,.12)}[data-theme="dark"] .pn a:hover{border-color:rgba(255,255,255,.3)}
 [data-theme="dark"] .vi::before{background:var(--ink);box-shadow:0 0 0 3px #1b212a}
 [data-theme="dark"] .vi:nth-child(odd){border-left-color:rgba(255,255,255,.16)}[data-theme="dark"] .vi:nth-child(even){border-right-color:rgba(255,255,255,.16)}
-[data-theme="dark"] .vl{background:#fff;border-radius:10px;padding:5px;box-sizing:content-box}
+[data-theme="dark"] .vl[src*="tsinghua"],[data-theme="dark"] .vl[src*="gatech"],[data-theme="dark"] .vl[src*="tju"]{background:#fff;border-radius:50%}
 [data-theme="dark"] .pic img{box-shadow:0 12px 30px rgba(0,0,0,.5)}
 [data-theme="dark"] .ri{border-color:transparent}
 [data-theme="dark"] .fig figcaption a{color:var(--muted);text-decoration-color:rgba(255,255,255,.25)}
