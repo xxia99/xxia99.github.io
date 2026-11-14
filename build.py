@@ -213,7 +213,16 @@ def _opt(html):
     return re.sub(r'<img [^>]*>',img,html)
 def shell(title,body,page):
     return _opt(_shell(title,body,page))
+LAND='''<header class="land" id="top"><div class="land-bg" aria-hidden="true"></div><div class="land-in">
+<div class="land-tx"><p class="land-eye"><span class="w">Ph.D. candidate &middot; Industrial and Systems Engineering &middot; UW-Madison</span><span class="n">Ph.D. candidate, UW-Madison</span></p>
+<h1 class="land-h"><b>Xin</b> Xia</h1>
+<p class="land-p">Reliable AI for decision-making in budgeted systems</p>
+<ul class="land-ri" aria-label="Research interests"><li><a href="project-multi-agent.html">Multi-agent reinforcement learning</a></li><li><a href="project-fleets.html">Embodied AI and autonomous systems</a></li><li><a href="project-language-models.html">Foundation models (LLMs, VLMs)</a></li><li><a href="project-supply-chain.html">Data-driven optimization</a></li></ul>
+<p class="land-cta"><a class="pri" href="#about">About me</a><a class="m" href="publications.html">Publications</a><a class="m" href="talks.html">Talks</a><a class="m" href="projects.html">Projects</a><a href="data/XinXia-CV.pdf" target="_blank" rel="noopener">CV</a></p></div>
+<div class="land-ph"><img src="images/hero.webp" alt="Xin Xia" width="900" height="900" fetchpriority="high"></div></div>
+<a class="land-cue" href="#about" aria-label="Scroll to the introduction"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a></header>'''
 def _shell(title,body,page):
+    land=LAND if page=="index" else ""
     pre="" if page=="index" else "index.html"
     items=[("index.html","about"),("publications.html","publications"),("talks.html","talks"),("projects.html","projects"),("data/XinXia-CV.pdf","cv")]
     nav="".join('<li><a href="%s"%s>%s</a></li>'%(h+('" target="_blank" rel="noopener' if h.endswith(".pdf") else ""),' class="on"' if (page==n or (page=="index" and n=="about")) else "","CV" if n=="cv" else n.capitalize()) for h,n in items)
@@ -241,8 +250,9 @@ def _shell(title,body,page):
 <link rel="preload" href="assets/fonts/roboto-normal-2.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/site.css?v={CSSV}">
 </head>
-<body>
+<body class="pg-{page}">
 <nav class="nav"><div class="in"><a class="brand" href="index.html"><b>Xin</b> Xia</a><ul>{nav}</ul><button class="tgl" id="tgl" type="button" aria-label="Switch between light and dark mode" title="Light or dark mode"><svg class="i-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button></div></nav>
+{land}
 <main class="page">
 {body}
 </main>
@@ -277,6 +287,10 @@ var ro=new IntersectionObserver(function(es){{var n=0;es.forEach(function(en){{i
 setTimeout(function(){{e.classList.remove('rv','in');e.style.transitionDelay='';}},800+n*80);}});}},{{threshold:.06,rootMargin:'0px 0px -6% 0px'}});
 rv.forEach(function(e){{ro.observe(e);}});}}
 var nl=document.getElementById('newslist'),nb=document.getElementById('nmore');if(nl&&nb){{nl.classList.add('nc');nb.hidden=false;nb.addEventListener('click',function(){{var o=nl.classList.toggle('open');nb.setAttribute('aria-expanded',o?'true':'false');nb.textContent=o?'Show fewer':'Show '+nb.getAttribute('data-n')+' earlier';if(!o){{var r=document.getElementById('news').getBoundingClientRect();if(r.top<0)window.scrollTo(0,window.scrollY+r.top-90);}}}});}}
+var ld=document.getElementById('top');if(ld){{var lf=function(){{document.documentElement.classList.toggle('past',window.scrollY>(ld.offsetHeight-120));}};lf();window.addEventListener('scroll',lf,{{passive:true}});}}
+var fl=document.getElementById('flt');if(fl){{fl.addEventListener('click',function(e){{var b=e.target.closest('button');if(!b)return;var f=b.getAttribute('data-f');
+[].forEach.call(fl.children,function(x){{x.setAttribute('aria-pressed',x===b?'true':'false');}});
+[].forEach.call(document.querySelectorAll('#research .yg'),function(g){{var n=0;[].forEach.call(g.querySelectorAll('.pub'),function(p){{var on=!f||(' '+p.getAttribute('data-t')+' ').indexOf(' '+f+' ')>-1;p.hidden=!on;if(on){{n++;p.classList.remove('fin');void p.offsetWidth;p.classList.add('fin');}}}});g.hidden=!n;}});}});}}
 var tg=document.getElementById('tgl'),mt=document.querySelector('meta[name="theme-color"]');
 function paint(){{var d=document.documentElement.getAttribute('data-theme')==='dark';if(mt)mt.setAttribute('content',d?'#12161c':'#2F3A4A');if(tg)tg.setAttribute('aria-pressed',d?'true':'false');}}
 paint();if(tg)tg.addEventListener('click',function(){{var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.classList.add('th');document.documentElement.setAttribute('data-theme',n);try{{localStorage.setItem('theme',n);}}catch(e){{}}paint();setTimeout(function(){{document.documentElement.classList.remove('th');}},350);}});
@@ -293,14 +307,15 @@ FOCUS=[("What to sense","Resource-limited anomaly detection: a small monitoring 
 AW1='https://connect.informs.org/discussion/informs-2026-best-referred-paper-competition-finalists#:~:text=SCAN%3A%20Networked%20Multi-Agent%20Reinforcement%20Learning'
 AW2='https://myemail.constantcontact.com/QCRE-News---May-2025.html?aid=vKcqr1w06AU&amp;soid=1101700049774#:~:text=Interactive%20Resource%20Planning%20and%20Change%20Detection'
 FOUR=(' My work covers four directions: <a href="project-fleets.html">robot and drone fleets for anomaly detection</a>, <a href="project-multi-agent.html">multi-agent systems for decision making</a>, <a href="project-language-models.html">foundation models and large language models</a>, and <a href="project-supply-chain.html">AI-driven supply chain management</a>.') if os.environ.get("PLAN","c")=="c" else ""
-hero=f"""<section id="about"><header class="hero"><div><h1><b>Xin</b> Xia</h1>
+hero=f"""<section id="about"><header class="hero solo"><div><h2>About me</h2>
 <p>I am a Ph.D. candidate in <a href="https://engineering.wisc.edu/departments/industrial-systems-engineering/">Industrial and Systems Engineering</a> at the University of Wisconsin-Madison, advised by <a href="https://kaibo.ie.wisc.edu/index.html">Prof. Kaibo Liu</a>. I received my M.Sc. in Electrical and Computer Engineering from Georgia Tech and my B.Eng. in Electrical Engineering and Automation from Tianjin University.</p>
 <p class="thesis">My research develops <b>reliable AI for decision-making in budgeted systems</b>, where information acquisition is constrained and decisions incur costs.</p>
 <p>This raises four questions: how to represent heterogeneous data, what to observe, how to act, and how to coordinate.</p>
-<p>I pursue two connected lines of work. <b class="ln">Representation and prediction:</b> multimodal data fusion built on foundation models (LLMs, VLMs), with applications in <a href="project-language-models.html">interpretable knowledge discovery from unstructured data</a> and clinical decision support. <b class="ln">AI-driven decision-making:</b> multi-agent reinforcement learning and data-driven optimization with statistical guarantees for sensing, acting, and coordination, with applications in <a href="project-fleets.html">embodied AI for autonomous fleets of robots and drones</a> and resilient networked systems in <a href="project-multi-agent.html">manufacturing</a> and <a href="project-supply-chain.html">supply chains</a>.</p>
+<p>I pursue two connected lines of work.</p>
+<div class="lines"><div class="lw"><b>Representation and prediction</b><p>Multimodal data fusion built on foundation models (LLMs, VLMs), with applications in <a href="project-language-models.html">interpretable knowledge discovery from unstructured data</a> and clinical decision support.</p></div><div class="lw"><b>AI-driven decision-making</b><p>Multi-agent reinforcement learning and data-driven optimization with statistical guarantees for sensing, acting, and coordination, with applications in <a href="project-fleets.html">embodied AI for autonomous fleets of robots and drones</a> and resilient networked systems in <a href="project-multi-agent.html">manufacturing</a> and <a href="project-supply-chain.html">supply chains</a>.</p></div></div>
 <p>My work has appeared in NeurIPS, <em>Technometrics</em>, <em>IEEE Transactions on Engineering Management</em>, and the <em>International Journal of Production Economics</em>. It received the <a class="hot" href="{AW1}" target="_blank" rel="noopener">INFORMS QSR Best Refereed Paper Award</a> (2026) and was a finalist in the <a class="hot" href="{AW2}" target="_blank" rel="noopener">IISE QCRE Best Track Paper Competition</a> (2025). I serve as a reviewer for NeurIPS, <em>IEEE Transactions on Automation Science and Engineering</em>, <em>PNAS</em>, and <em>PNAS Nexus</em>.</p>
 <p class="links"><a href="mailto:xxia65@wisc.edu">Email</a><a href="data/XinXia-CV.pdf">CV</a><a href="https://scholar.google.com/citations?user=baRH_vIAAAAJ&amp;hl=en">Google Scholar</a><a href="https://github.com/xxia99">GitHub</a><a href="https://www.linkedin.com/in/xin-xia-678546204/" target="_blank" rel="noopener">LinkedIn</a><a href="https://orcid.org/0009-0006-2910-7778" target="_blank" rel="noopener">ORCID</a></p>
-</div><div class="pic"><img src="images/avatar.jpg" alt="Xin Xia"><div class="addr">ISyE, UW-Madison<br>xxia65@wisc.edu</div><div class="ri"><div class="rih">Research interests</div><ul><li><a href="project-multi-agent.html">Multi-agent reinforcement learning</a></li><li><a href="project-fleets.html">Embodied AI and autonomous systems</a></li><li><a href="project-language-models.html">Foundation models (LLMs, VLMs)</a></li><li><a href="project-supply-chain.html">Data-driven optimization</a></li></ul></div></div></header></section>"""
+</div></header></section>"""
 VEN={"fleets":"NeurIPS &middot; INFORMS","multi-agent":"Technometrics &middot; IISE Trans.","language-models":"IJDS &middot; arXiv","supply-chain":"IEEE TEM &middot; IJPE &middot; M&amp;SOM"}
 PLAN=os.environ.get("PLAN","c")   # a: directions with papers (text)   b: bar and four boxes   c: nothing
 NICK={"dispatchppo":"DispatchPPO (NeurIPS 2026)","scan":"SCAN (INFORMS 2026)","hass":"Hierarchical adaptive sampling (Technometrics)","iise":"Multi-stage manufacturing coordination (IISE Trans., under review)",
@@ -317,10 +332,12 @@ news=('<section id="news"><h2>News</h2><div class="news" id="newslist">'
       +"".join('<div class="d%s">%s</div><div%s>%s</div>'%(" more" if i>=NEWS_SHOWN else "",d,' class="more"' if i>=NEWS_SHOWN else "",t) for i,(d,t) in enumerate(NEWS))
       +'</div>'+(f'<button class="nmore" id="nmore" type="button" hidden aria-expanded="false" aria-controls="newslist" data-n="{len(NEWS)-NEWS_SHOWN}">Show {len(NEWS)-NEWS_SHOWN} earlier</button>' if len(NEWS)>NEWS_SHOWN else '')+'</section>')
 SELECTED=["dispatchppo","scan","hass","kappa","bsac","causal"]
-research='<section id="research"><h2>Selected research <a class="more" href="publications.html">All publications &rarr;</a></h2>'
+TOPIC=[("marl","Multi-agent reinforcement learning"),("embodied","Embodied AI and autonomous systems"),("fm","Foundation models (LLMs, VLMs)"),("opt","Data-driven optimization")]
+PTOPIC={"dispatchppo":"marl embodied","scan":"marl embodied","hass":"marl","kappa":"fm","bsac":"opt","causal":"fm"}
+research='<section id="research"><h2>Selected research <a class="more" href="publications.html">All publications &rarr;</a></h2><div class="flt" id="flt" role="group" aria-label="Filter by research interest"><button type="button" data-f="" aria-pressed="true">All</button>'+"".join('<button type="button" data-f="%s" aria-pressed="false">%s</button>'%t for t in TOPIC)+'</div>'
 for g in ["2026","2025","2024","Under review"]:
     items=[p for p in PUBS if p["year"]==g and p["k"] in SELECTED]
-    if items: research+=f'<div class="year">{g}</div><div class="pubs">{"".join(pub_html(p) for p in items)}</div>'
+    if items: research+='<div class="yg"><div class="year">'+g+'</div><div class="pubs">'+"".join(pub_html(p).replace('<article class="pub"','<article class="pub" data-t="'+PTOPIC[p["k"]]+'"',1) for p in items)+'</div></div>'
 research+='</section>'
 TIMELINE=[("2025 - present","Ph.D. candidate, University of Wisconsin-Madison","Industrial and Systems Engineering. Advisor: Prof. Kaibo Liu.","uw.svg","University of Wisconsin-Madison",""),
           ("2022 - 2025","Research assistant, Tsinghua University",'<a href="https://thu-sail-lab.github.io/home/" target="_blank" rel="noopener">SAIL Lab</a>. Advisor: <a href="https://www.ie.tsinghua.edu.cn/eng/info/1051/1031.htm" target="_blank" rel="noopener">Prof. Chen Zhang</a>.',"tsinghua.png","Tsinghua University",""),
