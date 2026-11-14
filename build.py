@@ -214,12 +214,11 @@ def _opt(html):
 def shell(title,body,page):
     return _opt(_shell(title,body,page))
 LAND='''<header class="land" id="top"><div class="land-bg" aria-hidden="true"></div><div class="land-in">
-<div class="land-tx"><p class="land-eye"><span class="w">Ph.D. candidate &middot; Industrial and Systems Engineering &middot; UW-Madison</span><span class="n">Ph.D. candidate, UW-Madison</span></p>
-<h1 class="land-h"><b>Xin</b> Xia</h1>
+<div class="land-tx"><h1 class="land-h"><b>Xin</b> Xia</h1>
 <p class="land-p">Reliable AI for decision-making in budgeted systems</p>
 <ul class="land-ri" aria-label="Research interests"><li><a href="project-multi-agent.html">Multi-agent reinforcement learning</a></li><li><a href="project-fleets.html">Embodied AI and autonomous systems</a></li><li><a href="project-language-models.html">Foundation models (LLMs, VLMs)</a></li><li><a href="project-supply-chain.html">Data-driven optimization</a></li></ul>
 <p class="land-cta"><a class="pri" href="#about">About me</a><a class="m" href="publications.html">Publications</a><a class="m" href="talks.html">Talks</a><a class="m" href="projects.html">Projects</a><a href="data/XinXia-CV.pdf" target="_blank" rel="noopener">CV</a></p></div>
-<div class="land-ph"><img src="images/hero.webp" alt="Xin Xia" width="900" height="900" fetchpriority="high"></div></div>
+<div class="land-ph"><img src="images/hero.webp" alt="Xin Xia" width="900" height="900" fetchpriority="high"><p class="land-cap"><span>Ph.D. candidate, UW-Madison</span><span>Industrial and Systems Engineering</span><a href="mailto:xxia65@wisc.edu">xxia65@wisc.edu</a></p></div></div>
 <a class="land-cue" href="#about" aria-label="Scroll to the introduction"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a></header>'''
 def _shell(title,body,page):
     land=LAND if page=="index" else ""

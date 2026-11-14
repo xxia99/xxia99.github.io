@@ -461,3 +461,95 @@ html:not(.past) .pg-index .nav .brand,html:not(.past) .pg-index .nav ul{opacity:
 .pub[hidden],.yg[hidden]{display:none!important}
 .pub.fin{animation:fadein .3s ease-out both}
 @media (max-width:760px){.flt{gap:6px}.flt button{font-size:13.5px;padding:6px 12px}}
+
+/* entering screen on wide screens: the whole composition grows with the window (1x at 1280 wide, up to 1.6x), so it fills the screen */
+@media (min-width:821px){
+.land{--u:clamp(1px,min(100vw / 1280,100vh / 760),1.6px)}
+.land-in{max-width:calc(var(--u)*1100);gap:calc(var(--u)*56)}
+.land-eye{font-size:calc(var(--u)*13);margin-bottom:calc(var(--u)*14)}
+.land-h{font-size:calc(var(--u)*99)}
+.land-p{font-size:calc(var(--u)*24);margin-top:calc(var(--u)*20)}
+.land-ri{gap:calc(var(--u)*7);margin-top:calc(var(--u)*16);max-width:none}
+.land-ri a{font-size:calc(var(--u)*14.5);padding:calc(var(--u)*6) calc(var(--u)*14)}
+.land-cta{gap:calc(var(--u)*10);margin-top:calc(var(--u)*30)}
+.land-cta a{font-size:calc(var(--u)*15);padding:calc(var(--u)*10) calc(var(--u)*20)}
+.land-ph img{max-width:calc(var(--u)*440);border-radius:calc(var(--u)*28)}
+}
+/* the light/dark button follows the right edge of the enlarged entering screen, and glides back when the menu returns */
+@media (min-width:1160px){.pg-index{--u:clamp(1px,min(100vw / 1280,100vh / 760),1.6px)}.pg-index .tgl{transition:transform .3s var(--ease-out)}html:not(.past) .pg-index .tgl{transform:translateX(calc((var(--u)*1100 - 1100px)/2))}}
+
+/* entering screen, laptop: a smaller photo with the contact links in one row under it */
+.land-lk{display:none}
+@media (min-width:821px){
+.land-ph{justify-self:end;width:calc(var(--u)*384)}
+.land-ph img{max-width:100%;margin:0;border-radius:calc(var(--u)*24);box-shadow:0 20px 48px rgba(47,58,74,.2)}
+.land-lk{display:flex;justify-content:space-between;gap:calc(var(--u)*6);margin:calc(var(--u)*18) 0 0}
+.land-lk a{white-space:nowrap;font-size:calc(var(--u)*12.5);font-weight:500;line-height:1.3;padding:calc(var(--u)*5) calc(var(--u)*10);border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);transition:transform .14s var(--ease-out),border-color .16s ease,background-color .16s ease}
+.land-lk a:hover{text-decoration:none}.land-lk a:active{transform:scale(.97)}
+[data-theme="dark"] .land-lk a{color:#fff;background:transparent;border-color:rgba(255,255,255,.45)}
+[data-theme="dark"] .land-ph img{box-shadow:0 20px 48px rgba(0,0,0,.4)}
+}
+@media (min-width:821px) and (hover:hover) and (pointer:fine){.land-lk a:hover{border-color:var(--ink)}[data-theme="dark"] .land-lk a:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.45)}}
+
+/* entering screen, laptop: two content-sized columns centred as a pair; photo top level with the role line, contact links (plain text) level with the buttons */
+@media (min-width:821px){
+.pg-index,.land{--u:clamp(.72px,min(100vw / 1180,100vh / 740),1.7px)}
+.land-in{grid-template-columns:auto auto;justify-content:center;align-items:stretch;gap:calc(var(--u)*110);max-width:none}
+.land-tx{width:calc(var(--u)*600)}
+.land-ph{width:calc(var(--u)*292);display:flex;flex-direction:column;justify-self:auto}
+.land-ph img{border-radius:calc(var(--u)*22);box-shadow:0 16px 40px rgba(47,58,74,.18)}
+.land-lk{margin:auto 0 0;padding-bottom:calc(var(--u)*11);gap:0}
+.land-lk a,[data-theme="dark"] .land-lk a{border:0;background:none!important;padding:0;font-size:calc(var(--u)*13);color:var(--muted)}
+[data-theme="dark"] .land-lk a{color:rgba(255,255,255,.78)}
+.land-lk a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+[data-theme="dark"] .land-lk a:hover{color:#fff}
+}
+@media (min-width:1160px){html:not(.past) .pg-index .tgl{transform:translateX(calc(var(--u)*501 - 527px))}}
+
+/* entering screen, laptop: role, department and email as a three-line caption under the photo (replaces the role line above the name and the link row) */
+.land-cap{display:none}
+@media (min-width:821px){
+.land-tx .land-eye{display:none}
+.land-ph{width:calc(var(--u)*234)}
+.land-cap{display:block;margin:auto 0 0;padding-bottom:calc(var(--u)*3);font-size:calc(var(--u)*13.5);line-height:1.5;color:var(--muted)}
+.land-cap span{display:block}
+.land-cap a{color:inherit;font-weight:500}
+.land-cap a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+[data-theme="dark"] .land-cap{color:rgba(255,255,255,.78)}[data-theme="dark"] .land-cap a:hover{color:#fff}
+}
+@media (min-width:1160px){html:not(.past) .pg-index .tgl{transform:translateX(calc(var(--u)*472 - 527px))}}
+
+
+/* entering screen, laptop: a photo fades in from the right behind the headshot (sky in light mode, sunset in dark mode) */
+@media (min-width:821px){
+.land-bg::after{content:"";position:absolute;inset:0 0 0 40%;background:linear-gradient(180deg,rgba(244,246,248,0) 50%,#f4f6f8 88%),url(../images/land_sky.webp) 50% 40%/cover;opacity:.6;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 70%);mask-image:linear-gradient(90deg,transparent 0,#000 70%)}
+[data-theme="dark"] .land-bg{background-image:linear-gradient(180deg,#141a22,#12161c 85%);animation:none}
+[data-theme="dark"] .land-bg::after{background:linear-gradient(180deg,rgba(18,22,28,0) 50%,#12161c 88%),url(../images/land_sunset.webp) 60% 45%/cover;opacity:.75}
+.land-ph img{outline:calc(var(--u)*3) solid rgba(255,255,255,.9);border:0}
+}
+@media (min-width:821px){.land-cap{color:#465263}[data-theme="dark"] .land-cap{color:rgba(255,255,255,.88)}}
+
+/* entering screen, phone: the photo sits behind the headshot and fades out above the name (sky in light mode, sunset in dark mode) */
+@media (max-width:820px){
+.land-bg::after{content:"";position:absolute;inset:0;background:url(../images/land_sky.webp) 50% 40%/cover;opacity:.6;-webkit-mask-image:linear-gradient(180deg,#000 0,rgba(0,0,0,.6) 28%,transparent 60%);mask-image:linear-gradient(180deg,#000 0,rgba(0,0,0,.6) 28%,transparent 60%)}
+[data-theme="dark"] .land-bg{background-image:linear-gradient(180deg,#141a22,#12161c 85%);animation:none}
+[data-theme="dark"] .land-bg::after{background-image:url(../images/land_sunset.webp);background-position:30% 45%;opacity:.8}
+.land-ph img{outline:3px solid rgba(255,255,255,.9);border:0}
+}
+/* introduction card: paragraphs use the full card width, like the two blocks */
+.hero.solo p,.hero.solo p.thesis{max-width:none}
+
+/* headshot keeps the same size in light and dark mode (no extra border in dark mode) */
+[data-theme="dark"] .land-ph img{border:0}
+/* entering screen, phone: the same three-line caption as on laptop, beside the photo */
+@media (max-width:820px){
+.land-ph{display:flex;align-items:flex-end;gap:14px}
+.land-ph img{flex:none;width:140px}
+.land-cap{display:block;margin:0;padding-bottom:2px;font-size:12.5px;line-height:1.5;color:#465263;min-width:0}
+.land-cap span{display:block}.land-cap a{color:inherit;font-weight:500}
+[data-theme="dark"] .land-cap{color:rgba(255,255,255,.9)}
+}
+/* very narrow phones (360 px): tighten the menu so the light/dark button stays inside the screen */
+@media (max-width:380px){.nav ul{gap:2px}.nav li a{padding-left:7px;padding-right:7px}.nav .tgl{margin-left:0}}
+/* tablets in portrait (600 to 820 px): the one-column entering screen is centred and a little larger */
+@media (min-width:600px) and (max-width:820px){.land{padding:96px 32px 72px}.land-in{max-width:600px;margin:0 auto}.land-ph img{width:176px;max-width:176px}.land-cap{font-size:14px}.land-h{font-size:4.4rem}.land-ri a{font-size:15px;padding:6px 14px}.land-cta a{font-size:16px}}
