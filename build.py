@@ -388,6 +388,245 @@ for ti,t in enumerate(THEMES):
     body+="".join(proj_html(BYK0[k]) for k in t["keys"])+pn+'</section>'
     open(os.path.join(ROOT,"project-%s.html"%t["slug"]),"w").write(shell("%s - Xin Xia"%t["title"],body,"projects"))
 
+
+# ---------------------------------------------------------------- paper pages (one page per paper, grouped under its project)
+def _pfig(img,cap,w,h,cls=""):
+    return '<figure class="pp-fig%s"><a href="%s" data-lb="%s"><img src="%s" alt="%s" loading="lazy" style="aspect-ratio:%d/%d"></a><figcaption>%s</figcaption></figure>'%(cls,img,cap,img,cap,w,h,cap)
+def _pvid(v,poster,full,cap,w,h,link=""):
+    return '<figure class="pp-fig"><a class="media" href="%s" data-lb="%s" data-video="%s"><video src="%s" poster="%s" muted loop playsinline autoplay preload="auto" style="aspect-ratio:%d/%d"></video></a><figcaption>%s</figcaption></figure>'%(full,cap,v,v,poster,w,h,link or cap)
+DEMO_DEFAULT=(5,3,30,5,'scatter1')
+def _demo_idx():
+    import json
+    return json.load(open(os.path.join(ROOT,'data','demo','runs','index.json')))
+def _demo_index():
+    """Which recorded settings exist, as one 0/1 string per (UAVs, shift) file, ordered abnormal count x change point x layout."""
+    import json
+    ix=_demo_idx(); av={}
+    for k,keys in ix['avail'].items():
+        ks=set(keys); bits=''.join('1' if '%d_%d_%s'%(A,nu,l) in ks else '0' for A in ix['anoms'] for nu in ix['nus'] for l in ix['layouts'])
+        if '1' in bits and k.split('_')[1]!='1': av[k]=bits
+    Ns=sorted({int(k.split('_')[0]) for k in av}); sh=sorted({int(k.split('_')[1]) for k in av})
+    return json.dumps({'Ns':Ns,'shifts':sh,'nus':ix['nus'],'anoms':ix['anoms'],'layouts':ix['layouts'],'avail':av},separators=(',',':'))
+def _demo_default():
+    """The run shown before any setting is chosen, embedded so the figure draws without a request."""
+    import json
+    N,sh,nu,A,lay=DEMO_DEFAULT; f=json.load(open(os.path.join(ROOT,'data','demo','runs','n%d_s%d.json'%(N,sh)))); key='%d_%d_%s'%(A,nu,lay)
+    if key not in f['runs']: key=sorted(f['runs'])[0]; A,nu,lay=int(key.split('_')[0]),int(key.split('_')[1]),key.split('_')[2]
+    r=f['runs'][key]; p=r['p']; T=len(p)//(2*N)-1
+    pos=[[int(p[(t*N+n)*2:(t*N+n)*2+2]) for n in range(N)] for t in range(T+1)]
+    return json.dumps({'N':N,'shift':sh,'nu':nu,'A':A,'lay':lay,'anom':r['anom'],'al':r['al'],'pos':pos,'stat':[v/10 for v in r['s']]},separators=(',',':'))
+REPLAY_HTML="""<section class="pp-sec" id="replay"><h2>One episode, step by step</h2><div class="pp-tx"><p>The trained policy on a 10&times;10 grid, running on a server. Set up a run and press Run.</p></div>
+<div class="pf" id="rp">
+<form class="pc" id="pc" onsubmit="return false">
+<div class="pc-r"><span class="pc-l">Number of UAVs</span><div class="pc-seg" data-k="N"><button type="button" data-v="2">2</button><button type="button" data-v="5">5</button><button type="button" data-v="10">10</button></div></div>
+<div class="pc-r pc-lay"><span class="pc-l">Starting layout of UAVs</span><div class="pc-row"><div class="pc-x"><button type="button" id="pc-rand">Random</button></div><span class="pc-or">or drag a UAV on the grid</span></div></div>
+<div class="pc-r pc-two"><label class="pc-l" for="pc-nu">Anomalies occur at</label><div class="pc-pair"><div class="pc-sl"><input type="range" id="pc-nu" min="10" max="60" step="1" value="30"><output id="pc-nuv" for="pc-nu">time step 30</output></div><div class="pc-sl pc-mag"><label class="pc-l2" for="pc-sh">Magnitude</label><span>small</span><input type="range" id="pc-sh" min="2" max="4" step="0.05" value="3"><span>large</span></div></div></div>
+<div class="pc-r pc-lay"><span class="pc-l">Locations of the anomalies</span><div class="pc-row"><div class="pc-x"><button type="button" id="pc-scat">Randomly scattered</button><button type="button" id="pc-clus">Randomly clustered</button></div><span class="pc-or">or click the grid to add or remove one</span><span class="pc-ct" id="pc-cc"></span></div></div>
+<div class="pc-r pc-go"><button type="button" class="rp-play" id="pc-run">Run</button><span class="pc-msg" id="pc-msg" aria-live="polite"></span></div>
+</form>
+<div class="pf-panel"><ul class="pf-leg"><li><i class="l-n"></i>Normal Location</li><li><i class="l-a"></i>Anomaly</li><li><svg width="34" height="12" viewBox="0 0 34 12" aria-hidden="true"><path d="M1 6h27" stroke="#4d96da" stroke-width="2.2" fill="none"/><path d="M24 1.5l6 4.5-6 4.5" stroke="#4d96da" stroke-width="2.2" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg>Movement</li><li><i class="l-d"></i>Destination</li></ul>
+<div class="pf-main"><div class="pf-g"><p class="pf-t">At time step <i>t</i> = <span id="rp-t">0</span></p><svg class="pf-grid" id="rp-grid" viewBox="-2 -2 504 504" role="img" aria-label="Positions of the UAVs on the grid at the current time step"></svg><p class="pf-m" id="rp-m"></p><p class="pf-rt" id="rp-rt"></p></div>
+<div class="pf-c"><svg class="pf-chart" id="rp-chart" viewBox="0 0 560 410" role="img" aria-label="System-level detection statistic over the time steps of the episode"></svg></div></div></div>
+<p class="rp-status" id="rp-status" aria-live="polite"></p>
+<div class="rp-ctl"><button type="button" class="rp-play" id="rp-play">Play</button><input type="range" id="rp-range" min="0" max="1" value="0" step="1" aria-label="Time step of the episode"><span class="rp-step" id="rp-step"></span></div>
+<p class="rp-note" id="rp-note"></p></div>
+<script type="application/json" id="ep">@@EP@@</script><script type="application/json" id="pmeta">@@META@@</script><script type="application/json" id="pidx">@@IDX@@</script></section>"""
+DECODE_HTML="""<div class="pf dc" id="dc"><div class="pf-panel"><ul class="pf-leg"><li><svg width="34" height="12" viewBox="0 0 34 12" aria-hidden="true"><path d="M1 6h27" stroke="#7d7d7d" stroke-width="2.2" fill="none"/><path d="M24 1.5l6 4.5-6 4.5" stroke="#7d7d7d" stroke-width="2.2" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg>Feasible Movement</li><li><svg width="34" height="12" viewBox="0 0 34 12" aria-hidden="true"><path d="M1 6h30" stroke="#b9b9b9" stroke-width="2" stroke-dasharray="4 4" fill="none"/></svg>Removed Movement</li><li><i class="l-d"></i>Destination</li><li><svg width="34" height="12" viewBox="0 0 34 12" aria-hidden="true"><path d="M1 6h27" stroke="#4d96da" stroke-width="2.2" fill="none"/><path d="M24 1.5l6 4.5-6 4.5" stroke="#4d96da" stroke-width="2.2" fill="none" stroke-linejoin="round" stroke-linecap="round"/></svg>Movement</li></ul>
+<div class="pf-main"><div class="pf-g"><svg class="pf-grid" id="dc-grid" viewBox="-2 -2 254 254" role="img" aria-label="Three UAVs choosing their moves one at a time on a small grid"></svg></div>
+<div class="dc-side"><p class="dc-tag">Illustration of the decoding rule</p><p class="dc-cap" id="dc-cap" aria-live="polite"></p></div></div></div>
+<div class="dc-ctl"><button type="button" id="dc-back">Back</button><button type="button" id="dc-next" class="pri">Next</button><span class="dc-n" id="dc-n"></span></div></div>"""
+PAPER_JS="""<script>
+(function(){var NS='http://www.w3.org/2000/svg',BLUE='#4d96da',GRID='#adb0b6',ABN='#e59490',LINE='#4b92c3',ICON='images/demo/drone.png.webp';
+var RM=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function mk(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+function gridSvg(svg,G,C){var W=G*C;mk('rect',{x:0,y:0,width:W,height:W,fill:'#fff'},svg);var cells=mk('g',{},svg),lines=mk('g',{stroke:GRID,'stroke-width':2},svg),i;
+for(i=0;i<=G;i++){mk('line',{x1:0,y1:i*C,x2:W,y2:i*C},lines);mk('line',{x1:i*C,y1:0,x2:i*C,y2:W},lines);}
+var defs=mk('defs',{},svg);[['b',BLUE],['g','#7d7d7d']].forEach(function(m){var mm=mk('marker',{id:svg.id+'-'+m[0],viewBox:'0 0 10 10',refX:8,refY:5,markerWidth:5.2,markerHeight:5.2,orient:'auto'},defs);mk('path',{d:'M1 1L9 5L1 9',fill:'none',stroke:m[1],'stroke-width':1.8,'stroke-linejoin':'round','stroke-linecap':'round'},mm);});
+var cp=mk('clipPath',{id:svg.id+'-c'},defs);mk('circle',{cx:C/2,cy:C/2,r:C*0.42},cp);
+return {cells:cells,tail:mk('g',{},svg),under:mk('g',{},svg),icons:mk('g',{},svg),over:mk('g',{},svg)};}
+function icon(L,svg,C){var g=mk('g',{'class':'pf-u'},L.icons);mk('image',{href:ICON,x:C*0.08,y:C*0.08,width:C*0.84,height:C*0.84,'clip-path':'url(#'+svg.id+'-c)'},g);return g;}
+function arrow(L,svg,C,a,b,col,dash,delay){var ax=a[1]*C+C/2,ay=a[0]*C+C/2,bx=b[1]*C+C/2,by=b[0]*C+C/2,dx=bx-ax,dy=by-ay,n=Math.sqrt(dx*dx+dy*dy);if(n<1)return;var s=C*0.44,e=dash?C*0.12:C*0.2;
+var at={x1:ax+dx/n*s,y1:ay+dy/n*s,x2:bx-dx/n*e,y2:by-dy/n*e,stroke:dash?'#b9b9b9':(col=='b'?BLUE:'#7d7d7d'),'stroke-width':C*0.05,'stroke-linecap':'round','class':'pf-ar'};if(dash)at['stroke-dasharray']=(C*0.08)+' '+(C*0.08);else at['marker-end']='url(#'+svg.id+'-'+col+')';
+var l=mk('line',at,L.under);l.style.transformOrigin=ax+'px '+ay+'px';if(delay)l.style.animationDelay=delay+'ms';return l;}
+function dot(L,C,p,delay){var c=mk('circle',{cx:p[1]*C+C/2,cy:p[0]*C+C/2,r:C*0.15,fill:BLUE,'class':'pf-dot'},L.over);if(delay)c.style.animationDelay=delay+'ms';return c;}
+function clear(g){while(g.firstChild)g.removeChild(g.firstChild);}
+function place(g,p,C){g.style.transform='translate('+p[1]*C+'px,'+p[0]*C+'px)';}
+/* ---- episode replay and live runs ---- */
+(function(){var el=document.getElementById('rp');if(!el)return;var REC=JSON.parse(document.getElementById('ep').textContent),META=JSON.parse(document.getElementById('pmeta').textContent),G=10,C=50,K=G*G,TAIL=7,STEP=560,HOLD=150,MAXT=260;
+var svg=document.getElementById('rp-grid'),ch=document.getElementById('rp-chart'),q=function(id){return document.getElementById(id);},range=q('rp-range'),play=q('rp-play'),msg=q('pc-msg');
+var DEF={cells:REC.anom.slice()},st={N:REC.N,shift:REC.shift,nu:REC.nu,cells:REC.anom.slice(),start:REC.pos[0].slice(),arl0:'370'},IDX=JSON.parse(document.getElementById('pidx').textContent),files={},raw=null,D=null,V=null,timer=null,mv=null,now=0,editing=false,busy=false;
+function rc(k){return [Math.floor(k/G),k%G];}
+function thr(N,a){var m=META[N];return (m.thresholds&&m.thresholds[a])?m.thresholds[a].threshold:m.H370;}
+/* build the figure for one episode D = {N, nu, threshold, alarm, T, anom[], pos[t][n]=cell, stat[t]} */
+function build(){clear(svg);clear(ch);var L=gridSvg(svg,G,C),N=D.N,T=D.T,i,uavs=[];
+var abn=D.anom.map(function(k){return mk('rect',{x:(k%G)*C,y:Math.floor(k/G)*C,width:C,height:C,fill:ABN,opacity:0,'class':'pf-ab'},L.cells);});
+for(i=0;i<N;i++)uavs.push(icon(L,svg,C));
+var x0=80,x1=540,y0=20,y1=344,top=Math.min(Math.max(D.threshold*1.15,Math.max.apply(null,D.stat.slice(0,T+1))),D.threshold*2.5),ys=top>42?10:5,ymax=Math.ceil(top/ys)*ys+ys*0.2,xs=T>240?50:(T>100?20:10),xm=Math.max(xs,Math.ceil(T/xs)*xs);
+var X=function(t){return x0+t/xm*(x1-x0);},Y=function(v){return y1-Math.min(v,ymax)/ymax*(y1-y0);};
+mk('rect',{x:0,y:0,width:560,height:410,fill:'#fff'},ch);
+for(i=0;i<=xm;i+=xs){mk('line',{x1:X(i),y1:y0,x2:X(i),y2:y1,stroke:'#e6e6e6'},ch);mk('line',{x1:X(i),y1:y1,x2:X(i),y2:y1+6,stroke:'#000'},ch);mk('text',{x:X(i),y:y1+24,'text-anchor':'middle','class':'tk'},ch).textContent=i;}
+for(i=0;i<ymax;i+=ys){mk('line',{x1:x0,y1:Y(i),x2:x1,y2:Y(i),stroke:'#e6e6e6'},ch);mk('line',{x1:x0-6,y1:Y(i),x2:x0,y2:Y(i),stroke:'#000'},ch);mk('text',{x:x0-11,y:Y(i)+5,'text-anchor':'end','class':'tk'},ch).textContent=i;}
+if(D.nu<=xm)mk('line',{x1:X(D.nu),y1:y0,x2:X(D.nu),y2:y1,stroke:'#6e6e6e','stroke-dasharray':'5 4','stroke-width':1.4},ch);
+mk('line',{x1:x0,y1:Y(D.threshold),x2:x1,y2:Y(D.threshold),stroke:'#4d4d4d','stroke-width':1.6},ch);
+var line=mk('path',{fill:'none',stroke:LINE,'stroke-width':2.2,'stroke-linejoin':'round'},ch),dd=mk('g',{'class':'pf-dd',opacity:0},ch);
+if(D.alarm&&D.alarm>D.nu){var by=y1-22,bx0=X(D.nu),bx1=X(D.alarm);mk('path',{d:'M'+bx0+' '+(by-7)+'V'+by+'H'+bx1+'V'+(by-7),fill:'none',stroke:'#d62728','stroke-width':1.8},dd);mk('text',{x:Math.max(x0+70,Math.min(x1-70,(bx0+bx1)/2)),y:by-9,'text-anchor':'middle','class':'dl'},dd).textContent='detection delay';}
+var cur=mk('circle',{r:4.5,fill:LINE,'class':'pf-cur'},ch),starG=mk('g',{},ch),star=mk('path',{fill:'#ffa500','class':'pf-star',d:(function(){var s='',k,a,r;for(k=0;k<10;k++){a=-Math.PI/2+k*Math.PI/5;r=k%2?5:12;s+=(k?'L':'M')+(r*Math.cos(a)).toFixed(2)+' '+(r*Math.sin(a)).toFixed(2);}return s+'Z';})()},starG);
+if(D.alarm)starG.setAttribute('transform','translate('+X(D.alarm)+','+Y(D.stat[D.alarm])+')');
+mk('rect',{x:x0,y:y0,width:x1-x0,height:y1-y0,fill:'none',stroke:'#000','stroke-width':1.3},ch);
+var lg=mk('g',{},ch);mk('rect',{x:x0+10,y:y0+10,width:226,height:56,fill:'#fff',stroke:'#cfcfcf',rx:3},lg);mk('line',{x1:x0+20,y1:y0+27,x2:x0+56,y2:y0+27,stroke:'#6e6e6e','stroke-dasharray':'5 4','stroke-width':1.4},lg);mk('text',{x:x0+66,y:y0+32,'class':'lg'},lg).textContent='Change Point';mk('line',{x1:x0+20,y1:y0+49,x2:x0+56,y2:y0+49,stroke:'#4d4d4d','stroke-width':1.6},lg);mk('text',{x:x0+66,y:y0+54,'class':'lg'},lg).textContent='Detection Threshold';
+mk('text',{x:(x0+x1)/2,y:400,'text-anchor':'middle','class':'al'},ch).textContent='Time step';
+mk('text',{x:20,y:(y0+y1)/2,'text-anchor':'middle','class':'al',transform:'rotate(-90 20 '+(y0+y1)/2+')'},ch).textContent='System-level Statistics';
+var hit=mk('rect',{x:x0,y:y0,width:x1-x0,height:y1-y0,fill:'transparent','class':'pf-hit'},ch),drag=false,fromX=function(e){var r=hit.getBoundingClientRect();return Math.round((e.clientX-r.left)/r.width*xm);};
+hit.addEventListener('pointerdown',function(e){if(editing)return;drag=true;try{hit.setPointerCapture(e.pointerId);}catch(_){ }scrub(fromX(e));e.preventDefault();});
+hit.addEventListener('pointermove',function(e){if(drag)scrub(fromX(e));});
+['pointerup','pointercancel'].forEach(function(n){hit.addEventListener(n,function(){drag=false;unscrub();});});
+function steps(n){var d='M'+X(0).toFixed(1)+' '+Y(D.stat[0]).toFixed(1);for(var t=1;t<=n;t++)d+='H'+X(t).toFixed(1)+'V'+Y(D.stat[t]).toFixed(1);return d;}
+V={L:L,uavs:uavs,draw:function(t){
+abn.forEach(function(r){r.setAttribute('opacity',editing?0.55:(t>=D.nu?1:0));});clear(L.under);clear(L.over);clear(L.tail);
+for(var n=0;n<N;n++){var p=rc(D.pos[t][n]);place(uavs[n],p,C);if(editing)continue;
+for(var k=Math.max(1,t-TAIL+1);k<=t;k++){var a=rc(D.pos[k-1][n]),b=rc(D.pos[k][n]);if(a[0]==b[0]&&a[1]==b[1])continue;mk('line',{x1:a[1]*C+C/2,y1:a[0]*C+C/2,x2:b[1]*C+C/2,y2:b[0]*C+C/2,stroke:BLUE,'stroke-width':3,'stroke-linecap':'round',opacity:(0.08+0.3*(k-(t-TAIL))/TAIL).toFixed(2)},L.tail);}
+if(t<T){arrow(L,svg,C,p,rc(D.pos[t+1][n]),'b');dot(L,C,rc(D.pos[t+1][n]));}}
+line.setAttribute('d',editing?'':steps(t));cur.setAttribute('cx',X(t));cur.setAttribute('cy',Y(D.stat[t]));cur.setAttribute('opacity',editing?0:1);
+var al=!editing&&D.alarm&&t>=D.alarm;star.classList.toggle('on',!!al);dd.setAttribute('opacity',al?1:0);}};}
+function status(t){var s,n=D.anom.length,w=n==1?'An anomaly occurred at one location':('Anomalies occurred at '+n+' locations');
+if(editing)s='Press Run to start.';
+else if(D.alarm&&t>=D.alarm)s=D.alarm<D.nu||!n?'False alarm at time step '+D.alarm+': the threshold was crossed before any anomaly occurred.':'Alarm raised at time step '+D.alarm+', '+(D.alarm-D.nu)+' step'+(D.alarm-D.nu==1?'':'s')+' after the anomalies occurred.'+(t>D.alarm?' The run continues to show the UAVs gathering on the anomalies.':'');
+else if(t<D.nu||!n)s='No anomaly yet. The fleet keeps covering the region.';
+else s=w+' '+(t-D.nu)+' step'+(t-D.nu==1?'':'s')+' ago. The statistic grows as UAVs revisit '+(n==1?'it':'them')+'.';
+if(!editing&&!D.alarm&&t>=D.T)s='No alarm within '+D.T+' time steps.';
+if(q('rp-status').textContent!==s)q('rp-status').textContent=s;}
+function draw(t){t=Math.max(0,Math.min(D.T,t));now=t;range.max=D.T;range.value=t;q('rp-t').textContent=t;V.draw(t);status(t);q('rp-step').textContent=t+' / '+D.T;
+var m='';if(!editing&&D.vis){m=(t<D.nu||!D.anom.length)?'Locations visited so far: '+D.vis[t]+' of '+K:'UAVs on anomalies: '+D.on[t]+' of '+Math.min(D.N,D.anom.length);}q('rp-m').textContent=m;q('rp-rt').textContent=(!editing&&D.ms&&t>=1&&D.ms[t]!=null)?'Decision time this step: '+D.ms[t].toFixed(1)+' ms (one CPU core)':'';}
+function glide(){if(now>=D.T||RM)return;for(var n=0;n<D.N;n++)place(V.uavs[n],rc(D.pos[now+1][n]),C);}
+function stop(){if(timer){clearInterval(timer);timer=null;}if(mv){clearTimeout(mv);mv=null;}el.classList.remove('playing');play.textContent=now>=D.T?'Replay':'Play';draw(now);}
+function tick(){if(now>=D.T){stop();return;}draw(now+1);if(now>=D.T){stop();return;}mv=setTimeout(glide,HOLD);}
+function start(){if(editing)return;if(now>=D.T)draw(0);STEP=Math.max(200,Math.min(560,Math.round(42000/Math.max(1,D.T))));HOLD=Math.round(STEP*0.26);el.style.setProperty('--gl',Math.round(STEP*0.62)+'ms');el.classList.add('playing');play.textContent='Pause';mv=setTimeout(glide,HOLD);timer=setInterval(tick,STEP);}
+function scrub(t){if(timer)stop();el.classList.add('scrub');draw(t);play.textContent=now>=D.T?'Replay':'Play';}
+function unscrub(){el.classList.remove('scrub');}
+play.addEventListener('click',function(){timer?stop():start();});
+range.addEventListener('input',function(){if(!editing)scrub(+range.value);});range.addEventListener('change',unscrub);range.addEventListener('pointerup',unscrub);
+/* an episode as recorded or simulated: full statistic path; the threshold only marks where the alarm falls */
+function show(r,auto){raw=r;var H=thr(r.N,st.arl0),al=null,t;if(r.al>0)al=r.al;else for(t=1;t<r.stat.length;t++)if(r.stat[t]>=H){al=t;break;}
+D={N:r.N,nu:r.nu,anom:r.anom,pos:r.pos,stat:r.stat,ms:r.ms||null,threshold:H,alarm:al,T:r.stat.length-1};var sn={},vc=0;D.vis=[];D.on=[];for(t=0;t<r.pos.length;t++){var c=0;r.pos[t].forEach(function(k){if(!sn[k]){sn[k]=1;vc++;}if(r.anom.indexOf(k)>=0)c++;});D.vis.push(vc);D.on.push(c);}
+editing=false;el.classList.remove('editing');build();draw(0);note();play.disabled=false;range.disabled=false;if(auto&&!RM)start();}
+function note(){var m=META[st.N],a=st.arl0;q('rp-note').innerHTML=(raw&&raw.rec?'Recorded run of the trained policy. ':(raw?'Run of the trained policy, computed on the demo server. ':''))+'Detection threshold '+thr(st.N,a).toFixed(2)+', set for ARL<sub>0</sub> = '+a+' with '+st.N+' UAVs.';}
+/* settings and runs: the policy runs on a demo server and only the trajectory comes back; recorded runs are the fallback */
+var API='https://nixsummer-dispatch-demo.hf.space',MAXC=10,runb=q('pc-run'),KEYS=['N','shift','nu','A','lay'];
+function diag(N){var s=[],i,r;for(i=0;i<N;i++){r=N>1?Math.floor(i*(G-1)/(N-1)+1e-9):0;s.push(r*G+r);}return s;}
+function seg(k){return el.querySelector('.pc-seg[data-k="'+k+'"]');}
+function setSeg(k,v){[].forEach.call(seg(k).children,function(b){b.setAttribute('aria-pressed',b.getAttribute('data-v')==String(v)?'true':'false');});}
+function counts(){q('pc-cc').textContent='Anomalies: '+st.cells.length;}
+function sync(){counts();setSeg('N',st.N);q('pc-nu').value=st.nu;q('pc-nuv').textContent='time step '+st.nu;q('pc-sh').value=st.shift;q('pc-sh').setAttribute('aria-valuetext',st.shift<2.67?'small':(st.shift<3.34?'medium':'large'));}
+/* edit view: the starting layout and the abnormal locations, before a run */
+function edit(){counts();if(timer)stop();editing=true;el.classList.add('editing');raw=null;D={N:st.N,nu:st.nu,anom:st.cells.slice(),pos:[st.start.slice()],stat:[0],threshold:thr(st.N,st.arl0),alarm:null,T:0,vis:null};build();draw(0);play.disabled=true;range.disabled=true;note();msg.textContent='';runb.textContent='Run';}
+/* setup gestures: drag a UAV to move its start position, click a location to mark or clear it as abnormal */
+var nudged=false,dg=null,W0=G*C;
+function at(e){var r=svg.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*504-2,y=(e.clientY-r.top)/r.height*504-2;return {x:x,y:y,k:(x<0||y<0||x>=W0||y>=W0)?-1:Math.floor(y/C)*G+Math.floor(x/C)};}
+function mark(name,k,at2){var m=V[name];if(!m){m=V[name]=mk('rect',at2,name=='hov'?V.L.cells:V.L.under);}if(k<0){m.setAttribute('opacity',0);return;}m.setAttribute('x',(k%G)*C+(name=='hov'?0:3));m.setAttribute('y',Math.floor(k/G)*C+(name=='hov'?0:3));m.setAttribute('opacity',1);}
+function hover(k){mark('hov',k,{width:C,height:C,fill:ABN,'fill-opacity':0.3,opacity:0,'pointer-events':'none'});}
+function drop(k){mark('drop',k,{width:C-6,height:C-6,rx:4,fill:'none',stroke:BLUE,'stroke-width':3,'stroke-dasharray':'7 5',opacity:0,'pointer-events':'none'});}
+svg.addEventListener('pointerdown',function(e){if(busy||e.button>0)return;var p=at(e);if(p.k<0)return;
+if(!editing){edit();msg.textContent='';dg=null;return;}
+var i=st.start.indexOf(p.k);
+if(i>=0){dg={i:i,to:p.k,ox:p.x-(p.k%G)*C,oy:p.y-Math.floor(p.k/G)*C};try{svg.setPointerCapture(e.pointerId);}catch(_){ }el.classList.add('dragging');V.uavs[i].classList.remove('nudge');V.uavs[i].classList.add('pk');V.L.icons.appendChild(V.uavs[i]);hover(-1);drop(p.k);e.preventDefault();}
+else dg={i:-1,k:p.k,x:e.clientX,y:e.clientY};});
+svg.addEventListener('pointermove',function(e){if(!editing||busy)return;var p=at(e);
+if(dg&&dg.i>=0){var x=Math.max(0,Math.min(W0-C,p.x-dg.ox)),y=Math.max(0,Math.min(W0-C,p.y-dg.oy)),k=Math.floor((y+C/2)/C)*G+Math.floor((x+C/2)/C),o=st.start.indexOf(k);
+V.uavs[dg.i].style.transform='translate('+x+'px,'+y+'px)';if(o<0||o==dg.i){dg.to=k;drop(k);}e.preventDefault();return;}
+if(e.pointerType=='mouse')hover(p.k>=0&&st.start.indexOf(p.k)<0&&st.cells.indexOf(p.k)<0&&st.cells.length<MAXC?p.k:-1);});
+function endDrag(e,cancel){if(!dg)return;var d=dg,m='';dg=null;el.classList.remove('dragging');if(!editing)return;
+if(d.i>=0){if(!cancel)st.start[d.i]=d.to;}
+else if(!cancel){var p=at(e);if(p.k==d.k&&Math.abs(e.clientX-d.x)<9&&Math.abs(e.clientY-d.y)<9){var i=st.cells.indexOf(d.k);if(i>=0)st.cells.splice(i,1);else if(st.cells.length>=MAXC)m='This demo takes up to '+MAXC+' anomalies. Click one to clear it first.';else st.cells.push(d.k);}else return;}
+edit();msg.textContent=m;}
+svg.addEventListener('pointerup',function(e){endDrag(e,false);});svg.addEventListener('pointercancel',function(e){endDrag(e,true);});
+svg.addEventListener('pointerleave',function(){if(V&&V.hov)hover(-1);});
+/* a finger on a UAV drags it; a finger anywhere else on the grid scrolls the page */
+svg.addEventListener('touchstart',function(e){if(editing&&!busy&&e.target.closest&&e.target.closest('.pf-u'))e.preventDefault();},{passive:false});
+el.querySelector('.pc').addEventListener('click',function(e){var b=e.target.closest('.pc-seg button');if(!b||busy)return;st.N=+b.getAttribute('data-v');st.start=diag(st.N);sync();edit();});
+q('pc-nu').addEventListener('input',function(){st.nu=+this.value;sync();if(!busy)edit();});
+q('pc-sh').addEventListener('input',function(){st.shift=+this.value;sync();if(!busy)edit();});
+q('pc-rand').addEventListener('click',function(){if(busy)return;var s=[];while(s.length<st.N){var k=Math.floor(Math.random()*K);if(s.indexOf(k)<0)s.push(k);}st.start=s;edit();});
+/* random abnormal locations: spread apart, or one connected group; the count stays as it is */
+function nbr(k){var r=Math.floor(k/G),c=k%G,o=[];if(r>0)o.push(k-G);if(r<G-1)o.push(k+G);if(c>0)o.push(k-1);if(c<G-1)o.push(k+1);return o;}
+function scatter(n){var s=[],tries=0;while(s.length<n&&tries<4000){tries++;var k=Math.floor(Math.random()*K);if(s.indexOf(k)>=0)continue;if(tries<3000&&s.some(function(x){return Math.abs(Math.floor(x/G)-Math.floor(k/G))<=1&&Math.abs(x%G-k%G)<=1;}))continue;s.push(k);}return s;}
+function cluster(n){var s=[Math.floor(Math.random()*K)];while(s.length<n){var f=[];s.forEach(function(x){nbr(x).forEach(function(y){if(s.indexOf(y)<0&&f.indexOf(y)<0)f.push(y);});});s.push(f[Math.floor(Math.random()*f.length)]);}return s;}
+q('pc-scat').addEventListener('click',function(){if(busy)return;st.cells=scatter(st.cells.length||5);edit();});
+q('pc-clus').addEventListener('click',function(){if(busy)return;st.cells=cluster(st.cells.length||5);edit();});
+/* recorded runs, used when the server cannot be reached */
+function has(c){var b=IDX.avail[c.N+'_'+c.shift];if(!b)return false;var i=(IDX.anoms.indexOf(+c.A)*IDX.nus.length+IDX.nus.indexOf(+c.nu))*IDX.layouts.length+IDX.layouts.indexOf(c.lay);return i>=0&&b.charAt(i)=='1';}
+var ALL=(function(){var o=[];IDX.Ns.forEach(function(N){IDX.shifts.forEach(function(s){IDX.anoms.forEach(function(A){IDX.nus.forEach(function(nu){IDX.layouts.forEach(function(l){var c={N:N,shift:s,nu:nu,A:A,lay:l};if(has(c))o.push(c);});});});});});return o;})(),W={N:1000,shift:60,A:20,nu:6,lay:1};
+function near(c,k){var best=null,bd=1e9;ALL.forEach(function(o){if(String(o[k])!=String(c[k]))return;var d=0;KEYS.forEach(function(x){if(String(o[x])!=String(c[x]))d+=W[x]*(1+(x=='lay'?0:Math.abs(o[x]-c[x])/100));});if(d<bd){bd=d;best=o;}});return best;}
+function unpack(f,key){var r=f.runs[key],N=f.N,p=r.p,T=p.length/(2*N)-1,pos=[],t,n;for(t=0;t<=T;t++){var row=[];for(n=0;n<N;n++)row.push(+p.substr((t*N+n)*2,2));pos.push(row);}
+return {N:N,nu:+key.split('_')[1],anom:r.anom,pos:pos,stat:r.s.map(function(v){return v/10;}),al:r.al,rec:true};}
+function file(N,s){var k=N+'_'+s;if(!files[k]){files[k]=fetch('data/demo/runs/n'+N+'_s'+s+'.json').then(function(r){if(!r.ok)throw new Error('load');return r.json();});files[k].catch(function(){files[k]=null;});}return files[k];}
+function done(){busy=false;runb.disabled=false;runb.textContent='Run again';}
+function fallback(){var DOWN='The demo server could not be reached. ',n=st.cells.length,c={N:st.N,shift:Math.max(2,Math.min(4,Math.round(st.shift))),nu:Math.max(10,Math.min(60,Math.round(st.nu/10)*10)),A:IDX.anoms.reduce(function(a,b){return Math.abs(b-n)<Math.abs(a-n)?b:a;}),lay:'scatter1'},o=near(c,'N');
+if(!o){done();msg.textContent=DOWN+'Try again in a minute.';return;}
+file(o.N,o.shift).then(function(f){var r=unpack(f,o.A+'_'+o.nu+'_'+o.lay);done();st.cells=r.anom.slice();st.start=r.pos[0].slice();st.nu=r.nu;st.shift=o.shift;sync();show(r,true);if(RM)draw(D.T);msg.textContent=DOWN+'Showing a recorded run for a similar setting.';})
+.catch(function(){done();msg.textContent=DOWN+'Try again in a minute.';});}
+function post(){return fetch(API+'/run',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({N:st.N,shift:st.shift,nu:st.nu,cells:st.cells,start:st.start})}).then(function(r){return r.json().then(function(j){if(!r.ok){var e=new Error((j&&j.error)||'server');e.user=(r.status==400||r.status==429)&&!!(j&&j.error);throw e;}return j;});});}
+/* a sleeping server answers with an error page and is polled until it is up; no answer at all means it cannot be reached from here */
+function wake(until){return fetch(API+'/').then(function(r){if(r.ok)return r.json();if(Date.now()>until)throw new Error('down');return new Promise(function(res){setTimeout(res,4000);}).then(function(){return wake(until);});},function(){throw new Error('down');});}
+function run(){if(busy)return;if(!st.cells.length){msg.textContent='Place at least one anomaly on the grid.';return;}if(timer)stop();busy=true;runb.disabled=true;msg.textContent='Running DispatchPPO on Hugging Face ...';
+var slow=setTimeout(function(){msg.textContent='Starting the demo server. This can take up to a minute ...';},7000);
+post().catch(function(e){if(e.user)throw e;return wake(Date.now()+75000).then(post);})
+.then(function(j){clearTimeout(slow);done();msg.textContent='';show({N:j.N,nu:j.nu,anom:j.anom,pos:j.pos,stat:j.stat,al:j.al,ms:j.ms},true);if(RM)draw(D.T);})
+.catch(function(e){clearTimeout(slow);if(e&&e.user){done();runb.textContent='Run';msg.textContent=e.message;return;}fallback();});}
+runb.addEventListener('click',run);
+sync();edit();
+if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!nudged&&!RM&&editing&&V.uavs.length){nudged=true;V.uavs[V.uavs.length>2?2:0].classList.add('nudge');}}else if(timer){stop();}});},{threshold:0.35});io.observe(el.querySelector('.pf-panel'));}
+document.addEventListener('visibilitychange',function(){if(document.hidden&&timer)stop();});
+})();
+/* ---- decoding illustration ---- */
+(function(){var el=document.getElementById('dc');if(!el)return;var G=5,C=50,svg=document.getElementById('dc-grid'),L=gridSvg(svg,G,C);
+var U=[{at:[2,0],to:[2,1]},{at:[2,2],to:[3,2]},{at:[4,2],to:[3,3]}],uavs=U.map(function(){return icon(L,svg,C);});
+function moves(p){var o=[];for(var dr=-1;dr<=1;dr++)for(var dc=-1;dc<=1;dc++){var r=p[0]+dr,c=p[1]+dc;if(r>=0&&r<G&&c>=0&&c<G)o.push([r,c]);}return o;}
+var S=[{t:'Three UAVs must each choose a move for the next time step.'},
+{u:0,t:'UAV 1 is decided first. Its feasible movements are the neighbouring locations and staying in place; movements that leave the region are removed.'},
+{u:0,pick:1,t:'UAV 1 picks a destination. That location is now reserved.'},
+{u:1,t:'UAV 2 is next. The movement to the location reserved by UAV 1 is removed, so UAV 2 cannot choose it.'},
+{u:1,pick:1,t:'UAV 2 picks from the movements that remain.'},
+{u:2,t:'UAV 3 is last. Movements to both reserved locations are removed.'},
+{u:2,pick:1,t:'UAV 3 picks.'},
+{go:1,t:'All three move together. No two UAVs share a location, and each UAV was decided once, so no joint move had to be enumerated.'}],k=0;
+var cap=document.getElementById('dc-cap'),nb=document.getElementById('dc-next'),bb=document.getElementById('dc-back'),nn=document.getElementById('dc-n');
+function draw(){var s=S[k];clear(L.under);clear(L.over);var done=s.u===undefined?(s.go?3:0):s.u+(s.pick?1:0),res={},n;
+for(n=0;n<done;n++){res[U[n].to.join()]=1;if(!s.go){var fresh=s.pick&&n===s.u;var a=arrow(L,svg,C,U[n].at,U[n].to,'b');var d=dot(L,C,U[n].to,fresh?120:0);if(!fresh){a.classList.add('still');d.classList.add('still');}}}
+if(s.u!==undefined&&!s.pick){var p=U[s.u].at,j=0,rem=[];moves(p).forEach(function(m){if(m[0]==p[0]&&m[1]==p[1])return;if(res[m.join()])rem.push(m);else arrow(L,svg,C,p,m,'g',0,(j++)*38);});rem.forEach(function(m){arrow(L,svg,C,p,m,'g',1,j*38+140);});}
+uavs.forEach(function(g,n){place(g,s.go?U[n].to:U[n].at,C);g.style.opacity=(s.u===undefined||s.u===n||n<done)?1:0.45;});
+cap.textContent=s.t;nn.textContent=(k+1)+' / '+S.length;bb.disabled=k===0;nb.textContent=k===S.length-1?'Start over':'Next';}
+nb.addEventListener('click',function(){k=k===S.length-1?0:k+1;draw();});bb.addEventListener('click',function(){if(k>0){k--;draw();}});draw();})();
+})();
+</script>"""
+def paper_dispatchppo():
+    t=[x for x in THEMES if "dispatchppo" in x["keys"]][0]; p=BYK0["dispatchppo"]
+    bib="""@inproceedings{xia2026dispatch,
+  title     = {Learning Collision-Free Dispatch Policies for Route-Wise Decision-Dependent Anomaly Detection},
+  author    = {Xia, Xin and Zhang, Chen and Liu, Kaibo},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2026}
+}"""
+    b='<section class="pp-head"><p class="back"><a href="projects.html">Projects</a> <span>/</span> <a href="project-%s.html">%s</a></p>'%(t["slug"],t["title"])
+    b+='<h1 class="pp-t">%s</h1>'%p["title"]
+    b+='<p class="pp-au"><span><b>Xin Xia</b><sup>1</sup></span><span>Chen Zhang<sup>2</sup></span><span>Kaibo Liu<sup>1</sup></span></p>'
+    b+='<p class="pp-aff"><span><sup>1</sup> Industrial and Systems Engineering, University of Wisconsin-Madison</span><span><sup>2</sup> Industrial Engineering, Tsinghua University</span></p>'
+    b+='<p class="pp-ven">%s</p><div class="btns pp-btns">%s</div>'%(p["venue"],buttons(p,project=False))
+    b+='<nav class="pp-jump" aria-label="On this page"><a href="#problem">Problem</a><a href="#replay">Replay</a><a href="#method">Method</a><a href="#guarantees">Guarantees</a><a href="#results">Results</a><a href="#deployment">Deployment</a><a href="#bibtex">BibTeX</a></nav></section>'
+    b+='<section class="pp-sec"><div class="pp-two">'+_pvid("images/video/robotarium_demo.mp4","images/video/robotarium_demo_poster.jpg","images/fulls/dispatchppo_robotarium.jpg","Robotarium experiment: ten robots dispatched on the arena, with their trajectories and the detection statistic",1280,524,'Robot experiment (<a href="https://www.robotarium.gatech.edu" target="_blank" rel="noopener">Robotarium</a>)')+_pvid("images/video/dispatch_demo.mp4","images/video/dispatch_demo_poster.jpg","images/fulls/dispatchppo_ue.jpg","Five UAVs patrolling a forest in the Unreal Engine simulator; blue frustums are the camera footprints",1280,720,'Wildfire simulation (<a href="https://www.unrealengine.com" target="_blank" rel="noopener">Unreal Engine</a>)')+'</div>'
+    b+='<p class="pp-lead">%s</p></section>'%p["abs"]
+    b+='<section class="pp-sec" id="problem"><h2>A small fleet has to watch a large region</h2><div class="pp-tx"><p>Each UAV observes only the location it visits, and anomalies may occur at unknown locations and times. Dispatch decides which locations are observed, and the observations update the evidence that guides the next dispatch.</p><p>The goal is quickest detection under false-alarm control: keep the mean detection delay after a change (ARL<sub>1</sub>) small while the mean time to a false alarm (ARL<sub>0</sub>) stays above a required level. Moves are local, must stay inside the region, and must not collide.</p></div>'+_pfig("images/fulls/dp_overview.png","Route-wise quickest detection with a coordinated UAV fleet: applications, and the constrained dispatch of a team at one time step",1971,697)+'</section>'
+    b+=REPLAY_HTML.replace('@@EP@@',_demo_default()).replace('@@META@@',open(os.path.join(ROOT,'data','demo','dispatch_meta.json')).read()).replace('@@IDX@@',_demo_index())
+    b+='<section class="pp-sec" id="method"><h2>DispatchNet samples a collision-free joint move without enumeration</h2><div class="pp-tx"><p>The problem is formulated as a partially observable Markov decision process with decision-dependent observations. The policy network, DispatchNet, has an encoder for spatial features and inter-UAV interaction, and an autoregressive decoder that assigns moves one UAV at a time. A dynamic feasibility mask reserves the destinations of earlier UAVs for later ones, so every joint move is collision-free and is decoded in O(K+N) time for K locations and N UAVs.</p><p>Learning has two stages. Stage I trains the policy offline in simulated environments with PPO and proxy rewards. Stage II executes it online, mixed with uniform exploration.</p></div>'+DECODE_HTML+_pfig("images/fulls/dp_dispatchnet.png","DispatchNet architecture: the encoder extracts spatial features and inter-UAV interactions; the autoregressive decoder samples per-UAV moves with a dynamic feasibility mask",2149,715)+'</section>'
+    b+='<section class="pp-sec" id="guarantees"><h2>Coverage, focusing and detection delay are guaranteed</h2><dl class="pp-thm"><div><dt>Persistent coverage</dt><dd>Every location keeps being visited, and none is left unobserved.</dd></div><div><dt>Evidence-based focusing</dt><dd>An isolated anomaly, once revisited, becomes hard to leave.</dd></div><div><dt>Detection-delay bound</dt><dd>The mean detection delay is bounded, and more observations of the anomaly shrink the bound.</dd></div><div><dt>Clustered anomalies</dt><dd>Clustered anomalies are still detected; UAVs may move within the cluster.</dd></div></dl></section>'
+    b+='<section class="pp-sec" id="results"><h2>Detection delay under false-alarm control</h2><table class="pp-spec"><tr><th>Environment</th><td>5&times;5 to 30&times;30 grids, 1 to 30 UAVs, 2 to 10 anomalies</td></tr><tr><th>Anomaly</th><td>mean shift &Delta; &isin; {1, 2, 3, 4}, starting at a time drawn uniformly from 5 to 50</td></tr><tr><th>Metric</th><td>ARL<sub>1</sub> at ARL<sub>0</sub> = 370, 1,000 runs per setting</td></tr></table>'+_pfig("images/fulls/dp_delay.png","Detection delays (ARL1) under calibrated false-alarm control across grid sizes and fleet sizes, for Random, Greedy, Patrolling, Look-ahead and DispatchPPO",2200,1088)+'<h3>Per-step decision time</h3>'+_pfig("images/fulls/dp_time.png","Wall-clock time per decision (log scale) for Greedy, Look-ahead and DispatchPPO, against fleet size on a 10 by 10 grid (left) and against grid size with 5 UAVs (right)",2200,765," narrow")+'</section>'
+    b+='<section class="pp-sec" id="deployment"><h2>Deployment on robots and on a real wildfire</h2><h3>Robotarium: 10 robots, 5 anomalies from t = 250 s</h3>'+_pfig("images/fulls/dp_robotarium.png","Robotarium deployment: layout before and after the anomalies occur, robot trajectories, and the detection statistic over time",2200,732)+'<h3>Cherrywood wildfire (2021): 2 UAVs on a 10&times;10 grid rebuilt from satellite frames</h3>'+_pfig("images/fulls/dp_wildfire.png","Dispatch by DispatchPPO and by the Look-ahead baseline on the reconstructed wildfire; red intensity indicates the fire",2051,581)+'</section>'
+    b+='<section class="pp-sec" id="bibtex"><div class="pp-bh"><h2>BibTeX</h2><button class="pp-copy" id="bibcopy" type="button">Copy</button></div><pre class="pp-bib" id="bib">%s</pre></section>'%bib
+    b+='<nav class="pn"><a class="pv" href="project-%s.html"><span>Project</span>&larr; %s</a><a class="nx" href="project-%s.html#proj-scan"><span>Next paper</span>SCAN &rarr;</a></nav>'%(t["slug"],t["title"],t["slug"])
+    b+=PAPER_JS
+    b+="""<script>(function(){var b=document.getElementById('bibcopy'),t=document.getElementById('bib');if(!b)return;b.addEventListener('click',function(){var done=function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},1600);};var sel=function(){var r=document.createRange();r.selectNodeContents(t);var s=window.getSelection();s.removeAllRanges();s.addRange(r);};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t.textContent).then(done,sel);}else{sel();}});})();</script>"""
+    open(os.path.join(ROOT,"paper-dispatchppo.html"),"w").write(shell("%s - Xin Xia"%p["title"],b,"projects"))
+paper_dispatchppo()
+
 # ---------------------------------------------------------------- publications page (text only)
 GROUPS=[("Journal articles","J",["hass","bsac","ijpe"]),
         ("Conference papers","C",["dispatchppo","scan"]),
@@ -448,3 +687,14 @@ def check_design():
         print("DESIGN CHECK FAILED:"); [print("  - "+b) for b in bad]; raise SystemExit(1)
     print("design checks passed")
 check_design()
+
+# ---------------------------------------------------------------- link papers that have their own page
+PAPER_PAGES={"dispatchppo":"Learning Collision-Free Dispatch Policies for Route-Wise Decision-Dependent Anomaly Detection"}
+for _f in sorted(os.listdir(ROOT)):
+    if not _f.endswith(".html"): continue
+    _p=os.path.join(ROOT,_f); _h=open(_p).read(); _o=_h
+    for _k,_t in PAPER_PAGES.items():
+        _h=re.sub(r'project-[a-z-]+\.html#proj-%s\b'%_k,'paper-%s.html'%_k,_h)
+        if _f.startswith("project-"):
+            _h=_h.replace('<h3 class="t">%s</h3>'%_t,'<h3 class="t"><a href="paper-%s.html">%s</a></h3>'%(_k,_t))
+    if _h!=_o: open(_p,"w").write(_h)
