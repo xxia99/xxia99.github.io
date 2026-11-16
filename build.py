@@ -3,6 +3,9 @@ import re
 """Generate the one-page site xxia99.github.io (al-folio style, half-and-half research rows). Run: python build.py"""
 import os
 ROOT=os.path.dirname(os.path.abspath(__file__))
+# Cloudflare Web Analytics: paste the site token here; pages carry no counter while it is empty.
+CF_TOKEN="4b68bf452941403d855d50c3467e19e0"
+CFWA=('<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon=\'{"token": "%s"}\'></script>\n'%CF_TOKEN) if CF_TOKEN else ""
 
 NAV=[("index.html","about"),("publications.html","publications"),("projects.html","projects"),("news.html","news"),("cv.html","cv")]
 BIO1="My research combines multi-agent reinforcement learning with statistical process control. Where a mobile sensor goes decides what is observed, so I design learning-based sampling and dispatch policies that let fleets of agents, such as unmanned aerial vehicles, detect anomalies quickly in large systems while keeping false alarms under control, with guarantees on coverage, focusing, and detection delay."
@@ -298,7 +301,7 @@ function paint(){{var d=document.documentElement.getAttribute('data-theme')==='d
 paint();if(tg)tg.addEventListener('click',function(){{var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.classList.add('th');document.documentElement.setAttribute('data-theme',n);try{{localStorage.setItem('theme',n);}}catch(e){{}}paint();setTimeout(function(){{document.documentElement.classList.remove('th');}},350);}});
 }})();
 </script>
-</body>
+{CFWA}</body>
 </html>
 """
 

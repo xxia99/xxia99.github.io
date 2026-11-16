@@ -74,5 +74,6 @@ function paint(){var d=document.documentElement.getAttribute('data-theme')==='da
 paint();if(tg)tg.addEventListener('click',function(){var n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.classList.add('th');document.documentElement.setAttribute('data-theme',n);try{localStorage.setItem('theme',n);}catch(e){}paint();setTimeout(function(){document.documentElement.classList.remove('th');},350);});
 })();
 </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "4b68bf452941403d855d50c3467e19e0"}'></script>
 </body>
 </html>
