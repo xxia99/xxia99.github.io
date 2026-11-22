@@ -800,13 +800,13 @@ def _pnav(k):
                                        ('<a class="nx" href="paper-%s.html"><span>Next paper</span>%s &rarr;</a>'%(nx,PSHORT[nx])) if nx else '<span></span>')
 def paper_dispatchppo():
     t=[x for x in THEMES if "dispatchppo" in x["keys"]][0]; p=BYK0["dispatchppo"]
-    bib="""@inproceedings{
-xia2026learning,
-title={Learning Collision-Free Dispatch Policies for Route-Wise Decision-Dependent Anomaly Detection},
-author={Xin Xia and Chen Zhang and Kaibo Liu},
-booktitle={The Fortieth Annual Conference on Neural Information Processing Systems},
-year={2026},
-url={https://openreview.net/forum?id=s01jPERPlb}
+    bib="""@inproceedings{xia2026learning,
+  title     = {Learning Collision-Free Dispatch Policies for
+               Route-Wise Decision-Dependent Anomaly Detection},
+  author    = {Xin Xia and Chen Zhang and Kaibo Liu},
+  booktitle = {The Fortieth Annual Conference on Neural Information Processing Systems},
+  year      = {2026},
+  url       = {https://openreview.net/forum?id=s01jPERPlb}
 }"""
     b='<section class="pp-head"><p class="back"><a href="projects.html">Projects</a> <span>/</span> <a href="project-%s.html">%s</a></p>'%(t["slug"],t["title"])
     b+='<h1 class="pp-t">%s</h1>'%p["title"]
